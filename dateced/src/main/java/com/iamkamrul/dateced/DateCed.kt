@@ -137,6 +137,21 @@ class DateCed(private val dateTimeString : String = "") {
         return dateTime?.before(date) ?: throw IllegalArgumentException(error)
     }
 
+    //predefined date time format
+    val d get() = format("EEEE")
+    val y get() = format("yyyy")
+    val dMy get() = format("dd MMM yyyy")
+    val dMyHms get() = format("dd MMM yyyy hh:mm:ss")
+    val dMyHmsA get() = format("dd MMM yyyy hh:mm:ss aa")
+    val hM get() = format("hh:mm")
+    val hMs get() = format("hh:mm:ss")
+    val hMsA get() = format("hh:mm:ss aa")
+    val sqlYMd get() = format("yyyy-MM-dd")
+    val sqlYMdHm get() = format("yyyy-MM-dd hh:mm")
+    val sqlYMdHms get() = format("yyyy-MM-dd hh:mm:ss")
+
+    val sqlYMd24Hm get() = format("yyyy-MM-dd HH:mm")
+    val sqlYMd24Hms get() = format("yyyy-MM-dd HH:mm:ss")
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
