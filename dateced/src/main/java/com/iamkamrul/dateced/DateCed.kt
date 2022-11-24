@@ -121,6 +121,22 @@ class DateCed(private val dateTimeString : String = "") {
         }?:throw IllegalArgumentException(error)
     }
 
+    // return given date in millisecond
+    fun toMilliSecond():Long = dateTime?.time ?: throw IllegalArgumentException(error)
+
+    // return given date in date object
+    fun toDate():Date = dateTime ?: throw IllegalArgumentException(error)
+
+    // compare two date
+    fun greaterThan(date:Date):Boolean{
+        return dateTime?.after(date) ?: throw IllegalArgumentException(error)
+    }
+
+    // compare two date
+    fun lessThan(date:Date):Boolean{
+        return dateTime?.before(date) ?: throw IllegalArgumentException(error)
+    }
+
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
