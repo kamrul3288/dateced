@@ -42,5 +42,14 @@ class DateCed(private val dateTimeString : String = "") {
         }
     }
 
+    // return current date time
+    fun toCurrentDateTime(): Date = Calendar.getInstance().time
+
+    // return current date time in long format
+    fun toLongCurrentDateLong():Long = Calendar.getInstance().time.time
+
+    // set current date time and return object
+    fun currentDateTime():DateCed = this
+
 }
 private fun String.replaceInput():String = this.replace("/","-")
