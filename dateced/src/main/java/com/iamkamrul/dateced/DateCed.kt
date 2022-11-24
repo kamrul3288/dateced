@@ -12,7 +12,7 @@ private const val HOUR_MILLIS = 60 * MINUTE_MILLIS
 private const val DAY_MILLIS = 24 * HOUR_MILLIS
 private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
 
-class DateCed(private val dateTimeString : String = "") {
+class DateCed(dateTimeString : String = "") {
     private val _dateTimeString = dateTimeString.replaceInput()
     private var dateTime: Date? = null
 
