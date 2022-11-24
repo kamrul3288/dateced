@@ -3,6 +3,7 @@ package com.iamkamrul.dateced
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 private typealias SimpleDateFormatPattern = String
 private const val SECOND_MILLIS = 1000
@@ -102,6 +103,24 @@ class DateCed(private val dateTimeString : String = "") {
             this
         }?:throw IllegalArgumentException(error)
     }
+
+    /*
+      * responsible subtract day minutes hour and month from given date
+      * If pattern doesn't match then throw an exception
+      **/
+    fun subtract(days:Int = 0,month:Int = 0, hour:Int = 0, minutes:Int = 0):DateCed{
+        return dateTime?.let {dateTime->
+            val calender = Calendar.getInstance()
+            calender.time = dateTime
+            calender.add(Calendar.DATE, -abs(days))
+            calender.add(Calendar.MONTH,-abs(month))
+            calender.add(Calendar.HOUR,-abs(hour))
+            calender.add(Calendar.MINUTE,-abs(minutes))
+            this.dateTime = calender.time
+            this
+        }?:throw IllegalArgumentException(error)
+    }
+
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
