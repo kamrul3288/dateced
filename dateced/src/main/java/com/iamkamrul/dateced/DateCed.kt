@@ -58,7 +58,7 @@ class DateCed(private val dateTimeString : String = "") {
     fun currentDateTime():DateCed = this
 
     /*
-    * responsible for calculating previous time from mat
+    * responsible for calculating previous time from now time
     * If pattern doesn't match then throw an exception
     **/
     fun fromNow(units: Units = Units.DEFAULT):String{
@@ -83,6 +83,23 @@ class DateCed(private val dateTimeString : String = "") {
                 }
             }
 
+        }?:throw IllegalArgumentException(error)
+    }
+
+    /*
+   * responsible adding day minutes hour and month from given date
+   * If pattern doesn't match then throw an exception
+   **/
+    fun add(days:Int = 0,month:Int = 0, hour:Int = 0, minutes:Int = 0):DateCed{
+        return dateTime?.let {dateTime->
+            val calender = Calendar.getInstance()
+            calender.time = dateTime
+            calender.add(Calendar.DATE,days)
+            calender.add(Calendar.MONTH,month)
+            calender.add(Calendar.HOUR,hour)
+            calender.add(Calendar.MINUTE,minutes)
+            this.dateTime = calender.time
+            this
         }?:throw IllegalArgumentException(error)
     }
 
