@@ -5,6 +5,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private typealias SimpleDateFormatPattern = String
+private const val SECOND_MILLIS = 1000
+private const val MINUTE_MILLIS = 60 * SECOND_MILLIS
+private const val HOUR_MILLIS = 60 * MINUTE_MILLIS
+private const val DAY_MILLIS = 24 * HOUR_MILLIS
+private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
+
 class DateCed(private val dateTimeString : String = "") {
     private val _dateTimeString = dateTimeString.replaceInput()
     private var dateTime: Date? = null
@@ -50,6 +56,35 @@ class DateCed(private val dateTimeString : String = "") {
 
     // set current date time and return object
     fun currentDateTime():DateCed = this
+
+    /*
+    * responsible for calculating previous time from mat
+    * If pattern doesn't match then throw an exception
+    **/
+    fun fromNow(units: Units = Units.DEFAULT):String{
+        dateTime?.let { dateTime->
+            val now = toLongCurrentDateLong()
+            if (dateTime.time > now || dateTime.time <= 0){
+                return "In the future"
+            }
+            val diff = now - dateTime.time
+            return when (units) {
+                Units.DAY -> "${diff / DAY_MILLIS} days ago"
+                Units.HOUR -> "${diff / HOUR_MILLIS} hours ago"
+                Units.MINUTES -> "${diff / MINUTE_MILLIS} minutes ago"
+                else -> when{
+                    diff < SECOND_MILLIS -> "moments ago"
+                    diff < 2 * MINUTE_MILLIS -> "a minute ago"
+                    diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} minutes ago"
+                    diff < 2 * HOUR_MILLIS -> "an hour ago"
+                    diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} hours ago"
+                    diff < 48 * HOUR_MILLIS -> "yesterday"
+                    else -> "${diff / DAY_MILLIS} days ago"
+                }
+            }
+
+        }?:throw IllegalArgumentException(error)
+    }
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
