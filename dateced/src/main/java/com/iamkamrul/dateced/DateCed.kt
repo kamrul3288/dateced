@@ -15,7 +15,18 @@ private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe I
 class DateCed(dateTimeString : String = "") {
     private val _dateTimeString = dateTimeString.replaceInput()
     private var dateTime: Date? = null
+    private var fromDateTime:Date? = null
+    private var toDateTime:Date? = null
 
+
+    init {
+        dateTime = if (_dateTimeString.isNotEmpty()){
+            val pattern:SimpleDateFormatPattern = matchPattern(_dateTimeString)
+            SimpleDateFormat(pattern, Locale.US).parse(_dateTimeString) ?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
+        }else{
+            toCurrentDateTime()
+        }
+    }
 
     /*
     * this method is responsible for input date time pattern matching
@@ -24,11 +35,11 @@ class DateCed(dateTimeString : String = "") {
     **/
     private fun matchPattern(_input:String):SimpleDateFormatPattern{
         return if (matchYMDStringDateAndTime(_input)){
-            "yyyy-MM-dd hh:mm:ss"
+            "yyyy-MM-dd HH:mm:ss"
         }else if (matchYMDStringDate(_input)){
             "yyyy-MM-dd"
         }else if (matchDMYStringDateAndTime(_input)){
-            "dd-MM-yyyy hh:mm:ss"
+            "dd-MM-yyyy HH:mm:ss"
         }else if (matchDMYStringDate(_input)){
             "dd-MM-yyyy"
         }else throw IllegalArgumentException("Error Occurred! $_dateTimeString: Format incorrect")
@@ -135,6 +146,23 @@ class DateCed(dateTimeString : String = "") {
     // compare two date
     fun lessThan(date:Date):Boolean{
         return dateTime?.before(date) ?: throw IllegalArgumentException(error)
+    }
+
+    //responsible for checking date time range
+    fun isInsideTheRange():Boolean{
+        return dateTime?.after(fromDateTime) == true && dateTime?.before(toDateTime) == true
+    }
+    //set from Date Time
+    fun fromDateTime(inputDateTime:String):DateCed{
+        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
+        return this
+    }
+    //set To Date Time
+    fun toDateTime(inputDateTime:String):DateCed{
+        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        toDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
+        return this
     }
 
     //predefined date time format
