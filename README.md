@@ -1,4 +1,3 @@
-[![](https://jitpack.io/v/kamrul3288/dateced.svg)](https://jitpack.io/#kamrul3288/dateced)
 # Dateced
 Dateced is a android date time library for parsing, compare and formatting dates.
 # How to
@@ -13,14 +12,17 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-    implementation "com.github.kamrul3288:dateced:1.0.0"
+    implementation "com.github.kamrul3288:dateced:1.0.1"
 }
  ```
 
 
 # Usage
+```diff
+! Use 24 hour format.
+```
 
-## Format Dates
+# Format Dates
 ```kotlin
  DateCed("2022-10-11").dMyHmsA //Output: 11 Oct 2022 12:00:00 AM
  DateCed("2022-10-11").format("dd MMM yyyy") //Output: Output: 11 Oct 2022
@@ -52,3 +54,4 @@ DateCed("2022-12-11").lessThan(DateCed("2022-10-11").toDate()) //Output: false
 DateCed("2022-10-11").subtract(days = 1).dMy //Output: 10 Oct 2022
 DateCed("2022-10-11").add(month = 2).dMy //Output: 11 Dec 2022
 ```
+
