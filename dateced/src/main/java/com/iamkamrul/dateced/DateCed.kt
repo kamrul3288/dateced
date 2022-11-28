@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
+
 private typealias SimpleDateFormatPattern = String
 private const val secondInMillSecond = 1000L
 private const val minInMillSecond: Long = 60 * secondInMillSecond
@@ -192,6 +193,11 @@ class DateCed(dateTimeString : String = "") {
         return dateTime?.time == fromDateTime?.time
     }
 
+    // convert millisecond to hour min second
+    fun millisecondToHms(second:Long):String = String.format("%02d:%02d:%02d",  second / (60 * 60) % 24, second / 60 % 60, second % 60)
+    fun millisecondToMs(second:Long):String = String.format("%02d:%02d", second / 60 % 60, second % 60)
+
+
     //predefined date time format
     val d get() = format("EEEE")
     val y get() = format("yyyy")
@@ -211,6 +217,7 @@ class DateCed(dateTimeString : String = "") {
     val sqlYMd24Hms get() = format("yyyy-MM-dd HH:mm:ss")
     val hM24 get() = format("HH:mm")
     val hMaDmY get() = format("hh:mm aa dd MMM yyyy")
+
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
