@@ -196,17 +196,21 @@ class DateCed(dateTimeString : String = "") {
     val d get() = format("EEEE")
     val y get() = format("yyyy")
     val dMy get() = format("dd MMM yyyy")
+    val dM get() = format("dd MMM")
     val dMyHms get() = format("dd MMM yyyy hh:mm:ss")
     val dMyHmsA get() = format("dd MMM yyyy hh:mm:ss aa")
+    val dMyHmA get() = format("dd MMM yyyy hh:mm aa")
     val hM get() = format("hh:mm")
     val hMs get() = format("hh:mm:ss")
+    val hMa get() = format("hh:mm aa")
     val hMsA get() = format("hh:mm:ss aa")
     val sqlYMd get() = format("yyyy-MM-dd")
     val sqlYMdHm get() = format("yyyy-MM-dd hh:mm")
     val sqlYMdHms get() = format("yyyy-MM-dd hh:mm:ss")
-
     val sqlYMd24Hm get() = format("yyyy-MM-dd HH:mm")
     val sqlYMd24Hms get() = format("yyyy-MM-dd HH:mm:ss")
+    val hM24 get() = format("HH:mm")
+    val hMaDmY get() = format("hh:mm aa dd MMM yyyy")
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
