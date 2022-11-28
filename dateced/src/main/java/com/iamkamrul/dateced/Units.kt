@@ -1,3 +1,3 @@
 package com.iamkamrul.dateced
 
-enum class Units{DEFAULT,DAY,HOUR,MINUTES}
+enum class Units{DEFAULT,SECOND,DAY,HOUR,MINUTES,MONTH,YEAR}

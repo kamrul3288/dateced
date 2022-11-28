@@ -6,10 +6,12 @@ import java.util.*
 import kotlin.math.abs
 
 private typealias SimpleDateFormatPattern = String
-private const val SECOND_MILLIS = 1000
-private const val MINUTE_MILLIS = 60 * SECOND_MILLIS
-private const val HOUR_MILLIS = 60 * MINUTE_MILLIS
-private const val DAY_MILLIS = 24 * HOUR_MILLIS
+private const val secondInMillSecond = 1000L
+private const val minInMillSecond: Long = 60 * secondInMillSecond
+private const val hourInMillSecond: Long = 60 * minInMillSecond
+private const val dayInMillSecond: Long = 24 * hourInMillSecond
+private const val monthInMillSecond: Long = 30 * dayInMillSecond
+private const val yearInMillSecond: Long = 12 * monthInMillSecond
 private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
 
 class DateCed(dateTimeString : String = "") {
@@ -76,25 +78,43 @@ class DateCed(dateTimeString : String = "") {
     fun fromNow(units: Units = Units.DEFAULT):String{
         dateTime?.let { dateTime->
             val now = toLongCurrentDateLong()
-            if (dateTime.time > now || dateTime.time <= 0){
-                return "In the future"
-            }
             val diff = now - dateTime.time
-            return when (units) {
-                Units.DAY -> "${diff / DAY_MILLIS} days ago"
-                Units.HOUR -> "${diff / HOUR_MILLIS} hours ago"
-                Units.MINUTES -> "${diff / MINUTE_MILLIS} minutes ago"
+            return when(units){
+                Units.SECOND-> "${diff / secondInMillSecond} seconds ago"
+                Units.MINUTES->{
+                    if (diff < 2 * minInMillSecond) "${diff/ minInMillSecond} minute ago"
+                    else "${diff/ minInMillSecond} minutes ago"
+                }
+                Units.HOUR->{
+                    if ( diff < 2 * hourInMillSecond)"${diff/ hourInMillSecond} hour ago"
+                    else "${diff/ hourInMillSecond} hours ago"
+                }
+                Units.DAY->{
+                    if (diff < 2 * dayInMillSecond) "${diff/ dayInMillSecond} day ago"
+                    else "${diff/ dayInMillSecond} days ago"
+                }
+                Units.MONTH->{
+                    if (diff < 2 * monthInMillSecond) "${diff/ monthInMillSecond} month ago"
+                    else "${diff/ monthInMillSecond} months ago"
+                }
+                Units.YEAR->{
+                    if (diff < 2 * yearInMillSecond) "${diff / yearInMillSecond} year ago"
+                    else "${diff / yearInMillSecond} years ago"
+                }
                 else -> when{
-                    diff < SECOND_MILLIS -> "moments ago"
-                    diff < 2 * MINUTE_MILLIS -> "a minute ago"
-                    diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} minutes ago"
-                    diff < 2 * HOUR_MILLIS -> "an hour ago"
-                    diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} hours ago"
-                    diff < 48 * HOUR_MILLIS -> "yesterday"
-                    else -> "${diff / DAY_MILLIS} days ago"
+                    diff < secondInMillSecond -> "${diff / secondInMillSecond} seconds ago"
+                    diff < 2 * minInMillSecond -> "${diff/ minInMillSecond} minute ago"
+                    diff < 60 * minInMillSecond -> "${diff/ minInMillSecond} minutes ago"
+                    diff < 2 * hourInMillSecond -> "${diff/ hourInMillSecond} hour ago"
+                    diff < 24 * hourInMillSecond -> "${diff/ hourInMillSecond} hours ago"
+                    diff < 2 * dayInMillSecond -> "${diff/ dayInMillSecond} day ago"
+                    diff < 30 * dayInMillSecond -> "${diff/ dayInMillSecond} days ago"
+                    diff < 2 * monthInMillSecond -> "${diff/ monthInMillSecond} month ago"
+                    diff < 12 * monthInMillSecond -> "${diff/ monthInMillSecond} months ago"
+                    diff < 2 * yearInMillSecond -> "${diff / yearInMillSecond} year ago"
+                    else -> "${diff/ yearInMillSecond} years ago"
                 }
             }
-
         }?:throw IllegalArgumentException(error)
     }
 
@@ -163,6 +183,13 @@ class DateCed(dateTimeString : String = "") {
         val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
         toDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return this
+    }
+
+    //is to date is equal
+    fun isSameDateTime(inputDateTime:String):Boolean{
+        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
+        return dateTime?.time == fromDateTime?.time
     }
 
     //predefined date time format
