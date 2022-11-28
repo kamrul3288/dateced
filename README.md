@@ -1,5 +1,6 @@
 # Dateced
 Dateced is a android date time library for parsing, compare and formatting dates.
+### [Full Documentation](doc)
 # How to
 Step 1. Add the JitPack repository to your build file
 ```gradle

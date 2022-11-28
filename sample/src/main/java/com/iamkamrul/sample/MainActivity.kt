@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         DateCed().currentDateTime().format("dd MMM yyyy") //Output: 24 Nov 2022
 
-        DateCed("2022-10-11").fromNow() //Output: 44 days ago
+        DateCed("2022-10-11").fromNow(Units.DAY) //Output: 44 days ago
 
         DateCed("2022-10-11").fromNow(Units.MINUTES) //Output: 64772 minutes ago
 
@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         DateCed("2022-12-11").lessThan(DateCed("2022-10-11").toDate()) //Output: false
 
+        DateCed("2022-11-28").fromDateTime("2022-28-27").toDateTime("2022-28-29").isInsideTheRange()
+        DateCed("2022-11-28").isSameDateTime("2022-11-28") //output: true
+
+        DateCed().millisecondToMs(second = 70L)
         DateCed().d //Output: Thursday
 
     }
