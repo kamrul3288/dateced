@@ -18,8 +18,6 @@ private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe I
 class DateCed(dateTimeString : String = "") {
     private val _dateTimeString = dateTimeString.replaceInput()
     private var dateTime: Date? = null
-    private var fromDateTime:Date? = null
-    private var toDateTime:Date? = null
 
     companion object{
         // return current date time
@@ -177,30 +175,18 @@ class DateCed(dateTimeString : String = "") {
     }
 
     //responsible for checking date time range
-    fun isInsideTheRange():Boolean{
-        return dateTime?.after(fromDateTime) == true && dateTime?.before(toDateTime) == true
+    fun isInsideTheRange(fromDateTime:String,toDateTime:String):Boolean{
+        val from = SimpleDateFormat(matchPattern(fromDateTime.replaceInput()), Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
+        val to = SimpleDateFormat(matchPattern(toDateTime.replaceInput()), Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
+        return dateTime?.after(from) == true && dateTime?.before(to) == true
     }
-    //set from Date Time
-    fun fromDateTime(inputDateTime:String):DateCed{
-        val pattern = matchPattern(inputDateTime.replaceInput())
-        fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
-        return this
-    }
-    //set To Date Time
-    fun toDateTime(inputDateTime:String):DateCed{
-        val pattern = matchPattern(inputDateTime.replaceInput())
-        toDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
-        return this
-    }
+
 
     //is to date is equal
-    fun isSameDateTime(inputDateTime:String):Boolean{
-        val pattern = matchPattern(inputDateTime.replaceInput())
-        fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
-        return dateTime?.time == fromDateTime?.time
+    fun isSameDateTime(fromDateTime:String):Boolean{
+        val from = SimpleDateFormat(matchPattern(fromDateTime.replaceInput()), Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
+        return dateTime?.time == from.time
     }
-
-
 
 
     //predefined date time format
