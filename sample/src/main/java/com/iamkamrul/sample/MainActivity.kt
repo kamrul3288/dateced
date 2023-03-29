@@ -7,7 +7,6 @@ import com.iamkamrul.dateced.Units
 
 
 fun main() {
-    println(DateCed.convertMillisecondsToMinutesAndSeconds(millisecond = 62500))
 }
 
 class MainActivity : AppCompatActivity() {

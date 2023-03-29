@@ -80,44 +80,47 @@ class DateCed(dateTimeString : String = "") {
     * responsible for calculating previous time from now time
     * If pattern doesn't match then throw an exception
     **/
-    fun fromNow(units: Units = Units.DEFAULT):String{
+    fun fromNow(units: Units = Units.DEFAULT):Triple<Long,LocalizeUnit,String>{
         dateTime?.let { dateTime->
+
+
+
             val now = toLongCurrentDateTime()
             val diff = now - dateTime.time
             return when(units){
-                Units.SECOND-> "${diff / secondInMillSecond} seconds ago"
+                Units.SECOND-> Triple(first = diff / secondInMillSecond, second = LocalizeUnit.SECONDS, third = "seconds ago")
                 Units.MINUTES->{
-                    if (diff < 2 * minInMillSecond) "${diff/ minInMillSecond} minute ago"
-                    else "${diff/ minInMillSecond} minutes ago"
+                    if (diff < 2 * minInMillSecond) Triple(first=diff/ minInMillSecond,LocalizeUnit.MINUTE, third = "minute ago")
+                    else Triple(first=diff/ minInMillSecond,LocalizeUnit.MINUTES, third = "minutes ago")
                 }
                 Units.HOUR->{
-                    if ( diff < 2 * hourInMillSecond)"${diff/ hourInMillSecond} hour ago"
-                    else "${diff/ hourInMillSecond} hours ago"
+                    if ( diff < 2 * hourInMillSecond) Triple(first=diff/ hourInMillSecond, second = LocalizeUnit.HOUR, third = "hour ago")
+                    else Triple(first=diff/ hourInMillSecond, second = LocalizeUnit.HOURS, third = "hours ago")
                 }
                 Units.DAY->{
-                    if (diff < 2 * dayInMillSecond) "${diff/ dayInMillSecond} day ago"
-                    else "${diff/ dayInMillSecond} days ago"
+                    if (diff < 2 * dayInMillSecond) Triple(first=diff/ dayInMillSecond,second=LocalizeUnit.DAY,third= "day ago")
+                    else Triple(first=diff/ dayInMillSecond,second=LocalizeUnit.DAYS,third= "days ago")
                 }
                 Units.MONTH->{
-                    if (diff < 2 * monthInMillSecond) "${diff/ monthInMillSecond} month ago"
-                    else "${diff/ monthInMillSecond} months ago"
+                    if (diff < 2 * monthInMillSecond)  Triple(first=diff/ monthInMillSecond,second = LocalizeUnit.MONTH, third = "month ago")
+                    else Triple(first=diff/ monthInMillSecond,second = LocalizeUnit.MONTHS, third = "months ago")
                 }
                 Units.YEAR->{
-                    if (diff < 2 * yearInMillSecond) "${diff / yearInMillSecond} year ago"
-                    else "${diff / yearInMillSecond} years ago"
+                    if (diff < 2 * yearInMillSecond) Triple(first = diff / yearInMillSecond,second = LocalizeUnit.YEAR, third = "year ago")
+                    else Triple(first = diff / yearInMillSecond,second = LocalizeUnit.YEARS, third = "years ago")
                 }
                 else -> when{
-                    diff < secondInMillSecond -> "${diff / secondInMillSecond} seconds ago"
-                    diff < 2 * minInMillSecond -> "${diff/ minInMillSecond} minute ago"
-                    diff < 60 * minInMillSecond -> "${diff/ minInMillSecond} minutes ago"
-                    diff < 2 * hourInMillSecond -> "${diff/ hourInMillSecond} hour ago"
-                    diff < 24 * hourInMillSecond -> "${diff/ hourInMillSecond} hours ago"
-                    diff < 2 * dayInMillSecond -> "${diff/ dayInMillSecond} day ago"
-                    diff < 30 * dayInMillSecond -> "${diff/ dayInMillSecond} days ago"
-                    diff < 2 * monthInMillSecond -> "${diff/ monthInMillSecond} month ago"
-                    diff < 12 * monthInMillSecond -> "${diff/ monthInMillSecond} months ago"
-                    diff < 2 * yearInMillSecond -> "${diff / yearInMillSecond} year ago"
-                    else -> "${diff/ yearInMillSecond} years ago"
+                    diff < secondInMillSecond -> Triple(diff / secondInMillSecond,LocalizeUnit.SECONDS,"seconds ago")
+                    diff < 2 * minInMillSecond -> Triple(first=diff/ minInMillSecond,LocalizeUnit.MINUTE, third = "minute ago")
+                    diff < 60 * minInMillSecond ->  Triple(first=diff/ minInMillSecond,LocalizeUnit.MINUTES, third = "minutes ago")
+                    diff < 2 * hourInMillSecond -> Triple(first=diff/ hourInMillSecond, second = LocalizeUnit.HOUR, third = "hour ago")
+                    diff < 24 * hourInMillSecond -> Triple(first=diff/ hourInMillSecond, second = LocalizeUnit.HOURS, third = "hours ago")
+                    diff < 2 * dayInMillSecond -> Triple(first=diff/ dayInMillSecond,second=LocalizeUnit.DAY,third= "day ago")
+                    diff < 30 * dayInMillSecond -> Triple(first=diff/ dayInMillSecond,second=LocalizeUnit.DAYS,third= "days ago")
+                    diff < 2 * monthInMillSecond ->  Triple(first=diff/ monthInMillSecond,second = LocalizeUnit.MONTH, third = "month ago")
+                    diff < 12 * monthInMillSecond ->  Triple(first=diff/ monthInMillSecond,second = LocalizeUnit.MONTHS, third = "months ago")
+                    diff < 2 * yearInMillSecond -> Triple(first = diff / yearInMillSecond,second = LocalizeUnit.YEAR, third = "year ago")
+                    else -> Triple(first = diff / yearInMillSecond,second = LocalizeUnit.YEAR, third = "year ago")
                 }
             }
         }?:throw IllegalArgumentException(error)
@@ -179,20 +182,20 @@ class DateCed(dateTimeString : String = "") {
     }
     //set from Date Time
     fun fromDateTime(inputDateTime:String):DateCed{
-        val pattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime.replaceInput())
         fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return this
     }
     //set To Date Time
     fun toDateTime(inputDateTime:String):DateCed{
-        val pattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime.replaceInput())
         toDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return this
     }
 
     //is to date is equal
     fun isSameDateTime(inputDateTime:String):Boolean{
-        val pattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime.replaceInput())
         fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return dateTime?.time == fromDateTime?.time
     }
