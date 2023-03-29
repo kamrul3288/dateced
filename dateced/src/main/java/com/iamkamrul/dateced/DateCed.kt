@@ -1,12 +1,12 @@
 package com.iamkamrul.dateced
 
+import com.iamkamrul.dateced.DateCedPattern.matchPattern
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
 
-private typealias SimpleDateFormatPattern = String
 private const val secondInMillSecond = 1000L
 private const val minInMillSecond: Long = 60 * secondInMillSecond
 private const val hourInMillSecond: Long = 60 * minInMillSecond
@@ -21,10 +21,32 @@ class DateCed(dateTimeString : String = "") {
     private var fromDateTime:Date? = null
     private var toDateTime:Date? = null
 
+    companion object{
+        // return current date time
+        fun toCurrentDateTime(): Date = Calendar.getInstance().time
+
+        // return current date time in long format
+        fun toLongCurrentDateTime():Long = Calendar.getInstance().time.time
+
+        // return millisecond to formatted hour minute second
+        fun millisecondToHms(millisecond:Long):String = String.format("%02d:%02d:%02d",  millisecond / (60 * 60) % 24, millisecond / 60 % 60, millisecond % 60)
+
+        fun millisecondToMinutesAndSecond(milliseconds:Long): Pair<Long, Long> {
+            val totalSeconds = milliseconds / 1000
+            return Pair(totalSeconds/60,totalSeconds%60)
+        }
+
+        fun millisecondToHourAndMinutesAndSecond(milliseconds:Long): Triple<Long, Long, Long> {
+            val totalSeconds = milliseconds / 1000
+            return Triple(totalSeconds / 3600 , (totalSeconds % 3600) / 60, totalSeconds % 60)
+        }
+    }
+
 
     init {
+
         dateTime = if (_dateTimeString.isNotEmpty()){
-            val pattern:SimpleDateFormatPattern = matchPattern(_dateTimeString)
+            val pattern = matchPattern(_dateTimeString)
             SimpleDateFormat(pattern, Locale.US).parse(_dateTimeString) ?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         }else{
             toCurrentDateTime()
@@ -36,17 +58,6 @@ class DateCed(dateTimeString : String = "") {
     * Only Two pattern support right now / and -
     * If pattern doesn't match then throw an exception
     **/
-    private fun matchPattern(_input:String):SimpleDateFormatPattern{
-        return if (matchYMDStringDateAndTime(_input)){
-            "yyyy-MM-dd HH:mm:ss"
-        }else if (matchYMDStringDate(_input)){
-            "yyyy-MM-dd"
-        }else if (matchDMYStringDateAndTime(_input)){
-            "dd-MM-yyyy HH:mm:ss"
-        }else if (matchDMYStringDate(_input)){
-            "dd-MM-yyyy"
-        }else throw IllegalArgumentException("Error Occurred! $_dateTimeString: Format incorrect")
-    }
 
     /*
     * responsible for formatting input date after pattern match
@@ -63,14 +74,7 @@ class DateCed(dateTimeString : String = "") {
         }
     }
 
-    // return current date time
-    fun toCurrentDateTime(): Date = Calendar.getInstance().time
 
-    // return current date time in long format
-    fun toLongCurrentDateLong():Long = Calendar.getInstance().time.time
-
-    // set current date time and return object
-    fun currentDateTime():DateCed = this
 
     /*
     * responsible for calculating previous time from now time
@@ -78,7 +82,7 @@ class DateCed(dateTimeString : String = "") {
     **/
     fun fromNow(units: Units = Units.DEFAULT):String{
         dateTime?.let { dateTime->
-            val now = toLongCurrentDateLong()
+            val now = toLongCurrentDateTime()
             val diff = now - dateTime.time
             return when(units){
                 Units.SECOND-> "${diff / secondInMillSecond} seconds ago"
@@ -175,27 +179,25 @@ class DateCed(dateTimeString : String = "") {
     }
     //set from Date Time
     fun fromDateTime(inputDateTime:String):DateCed{
-        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime)
         fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return this
     }
     //set To Date Time
     fun toDateTime(inputDateTime:String):DateCed{
-        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime)
         toDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return this
     }
 
     //is to date is equal
     fun isSameDateTime(inputDateTime:String):Boolean{
-        val pattern:SimpleDateFormatPattern = matchPattern(inputDateTime)
+        val pattern = matchPattern(inputDateTime)
         fromDateTime = SimpleDateFormat(pattern, Locale.US).parse(inputDateTime)?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
         return dateTime?.time == fromDateTime?.time
     }
 
-    // convert millisecond to hour min second
-    fun millisecondToHms(second:Long):String = String.format("%02d:%02d:%02d",  second / (60 * 60) % 24, second / 60 % 60, second % 60)
-    fun millisecondToMs(second:Long):String = String.format("%02d:%02d", second / 60 % 60, second % 60)
+
 
 
     //predefined date time format
