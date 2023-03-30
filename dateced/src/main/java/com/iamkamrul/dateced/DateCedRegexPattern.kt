@@ -15,11 +15,11 @@ internal object DateCedPattern {
 private val patterns = listOf(
     Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$""".toRegex(), second = "yyyy-MM-dd HH:mm:ss"),
     Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$""".toRegex(), second = "yyyy-MM-dd HH:mm"),
-    Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} (AM|PM)$""".toRegex(), second = "yyyy-MM-dd HH:mm:ss aa"),
-    Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2} (AM|PM)$""".toRegex(), second = "yyyy-MM-dd HH:mm aa"),
+    Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} (AM|PM)$""".toRegex(), second = "yyyy-MM-dd hh:mm:ss aa"),
+    Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}:\d{2} (AM|PM)$""".toRegex(), second = "yyyy-MM-dd hh:mm aa"),
 
-    Pair(first = """^\d{4}-\d{2}-\d{2} \d{2}$""".toRegex(), second = "yyyy-MM-dd"),
-    Pair(first = """^\d{2}-\d{2}-\d{2} \d{4}$""".toRegex(), second = "dd-MM-yyyy"),
+    Pair(first = """^\d{4}-\d{2}-\d{2}$""".toRegex(), second = "yyyy-MM-dd"),
+    Pair(first = """^\d{2}-\d{2}-\d{4}$""".toRegex(), second = "dd-MM-yyyy"),
 
     Pair(first = """^\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}$""".toRegex(), second = "dd-MM-yyyy HH:mm:ss"),
     Pair(first = """^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$""".toRegex(), second = "dd-MM-yyyy HH:mm"),

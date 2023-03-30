@@ -26,9 +26,6 @@ class DateCed(inputDateTime : String = "", pattern: String = "") {
         // return current date time in long format
         fun toLongCurrentDateTime():Long = Calendar.getInstance().time.time
 
-        // return millisecond to formatted hour minute second
-        fun millisecondToHms(millisecond:Long):String = String.format("%02d:%02d:%02d",  millisecond / (60 * 60) % 24, millisecond / 60 % 60, millisecond % 60)
-
         fun millisecondToMinutesAndSecond(milliseconds:Long): Pair<Long, Long> {
             val totalSeconds = milliseconds / 1000
             return Pair(totalSeconds/60,totalSeconds%60)
@@ -165,7 +162,7 @@ class DateCed(inputDateTime : String = "", pattern: String = "") {
     fun toDate():Date = dateTime ?: throw IllegalArgumentException(error)
 
     // compare two date
-    fun greaterThan(date:Date):Boolean{
+    fun isGreaterThan(date:Date):Boolean{
         return dateTime?.after(date) ?: throw IllegalArgumentException(error)
     }
 
@@ -178,8 +175,10 @@ class DateCed(inputDateTime : String = "", pattern: String = "") {
     fun isInsideTheRange(fromDateTime:String,toDateTime:String,pattern: String = ""):Boolean{
         val matchedPattern = pattern.ifEmpty { matchPattern(fromDateTime.replaceInput()) }
         val from = SimpleDateFormat(matchedPattern, Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
-        val to = SimpleDateFormat(matchedPattern, Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
-        return dateTime?.after(from) == true && dateTime?.before(to) == true
+        val calender = Calendar.getInstance()
+        calender.time = SimpleDateFormat(matchedPattern, Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
+        calender.add(Calendar.DATE,1)
+        return dateTime?.after(from) == true && dateTime?.before(calender.time) == true
     }
 
 
