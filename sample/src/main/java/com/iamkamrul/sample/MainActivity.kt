@@ -4,41 +4,82 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.iamkamrul.dateced.DateCed
 import com.iamkamrul.dateced.Units
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 fun main() {
+
 }
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        example()
+    }
 
-        DateCed("2022-10-11").dMyHmsA //Output: 11 Oct 2022 12:00:00 AM
+    private fun example(){
+        println(DateCed.toCurrentDateTime())
+        println(DateCed.toLongCurrentDateTime())
 
-        DateCed("2022-10-11").format("dd MMM yyyy") //Output: 11 Oct 2022
+        val (minutes,seconds) = DateCed.millisecondToMinutesAndSecond(milliseconds = 201000)
+        println("$minutes Minutes $seconds Seconds")
 
-        DateCed.toCurrentDateTime() //Output: Date Object
+        val (h,m,s) = DateCed.millisecondToHourAndMinutesAndSecond(milliseconds = 201000)
+        println("$h Hours $m Minutes $s Seconds")
 
-        DateCed("2022-10-11").fromNow(Units.DAY) //Output: 44 days ago
+        println(DateCed(inputDateTime = "2022-10-11").dMyHms)
 
-        DateCed("2022-10-11").fromNow(Units.MINUTES) //Output: 64772 minutes ago
+        val(days,localizeUnit,defaultLocalize) = DateCed(inputDateTime="10-11-2022").fromNow(Units.DAY)
+        println("$days $defaultLocalize")
 
-        DateCed("2022-10-11").subtract(days = 1).dMy //Output: 10 Oct 2022
+        println(DateCed().add(days = 2).dMy)
+        println(DateCed().subtract(days = 2).dMy)
 
-        DateCed("2022-10-11").add(month = 2).dMy //Output: 11 Dec 2022
+        println(DateCed().toMilliSecond())
+        println(DateCed().toDate())
 
-        DateCed("2022-10-11").toMilliSecond() //Output: 1665424800000
+        val isGreaterThan = DateCed("10-11-2022").isGreaterThan(DateCed.toCurrentDateTime())
+        println(isGreaterThan)
 
-        DateCed("2022-10-11").toDate() //Output: Date Time object
+        val isInside = DateCed(inputDateTime = "31-03-2023").isInsideTheRange(fromDateTime = "27-03-2023", toDateTime = "31-03-2023")
+        println(isInside)
 
-        DateCed("2022-12-11").greaterThan(DateCed("2022-10-11").toDate()) //Output: true
+        val isSameDate = DateCed(inputDateTime = "31-03-2023").isSameDateTime(fromDateTime = "27-03-2023")
+        println(isSameDate)
 
-        DateCed("2022-12-11").lessThan(DateCed("2022-10-11").toDate()) //Output: false
 
-        DateCed("2022-11-28").isSameDateTime("2022-11-28") //output: true
+        println(DateCed("2023-01-01 23:00:00").dMyHmsA)
+        println(DateCed("2023-01-01 23:00").dMyHmsA)
 
-        DateCed().d //Output: Thursday
+        println(DateCed("2023-01-01 11:00:00 AM").dMyHmsA)
+        println(DateCed("2023-01-01 11:00 AM").dMyHmsA)
 
+        println(DateCed("2023-01-01").dMyHmsA)
+        println(DateCed("01-01-2023").dMyHmsA)
+
+        println(DateCed("01-01-2023 23:00:00").dMyHmsA)
+        println(DateCed("01-01-2023 23:00").dMyHmsA)
+
+        println(DateCed("01-01-2023 11:00:00 AM").dMyHmsA)
+        println(DateCed("01-01-2023 11:00 AM").dMyHmsA)
+
+
+        println(DateCed("01 Jan 2023").dMyHmsA)
+        println(DateCed("01 Jan 2023 11:00:00 AM").dMyHmsA)
+        println(DateCed("01 Jan 2023 11:00 AM").dMyHmsA)
+
+        println(DateCed("01 Jan 2023 23:00:00").dMyHmsA)
+        println(DateCed("01 Jan 2023 23:00").dMyHmsA)
+
+
+        println(DateCed("23:00:00").dMyHmsA)
+        println(DateCed("23:00").dMyHmsA)
+
+        println(DateCed("11:00:00 PM").hM24)
+        println(DateCed("11:00 PM").hM24)
+
+        println(DateCed("2023-03-30T10:15:30.123Z").dMyHmsA)
     }
 }
