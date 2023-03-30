@@ -15,8 +15,8 @@ private const val monthInMillSecond: Long = 30 * dayInMillSecond
 private const val yearInMillSecond: Long = 12 * monthInMillSecond
 private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
 
-class DateCed(dateTimeString : String = "") {
-    private val _dateTimeString = dateTimeString.replaceInput()
+class DateCed(inputDateTime : String = "", pattern: String = "") {
+    private val dateTimeString = inputDateTime.replaceInput()
     private var dateTime: Date? = null
 
     companion object{
@@ -43,9 +43,9 @@ class DateCed(dateTimeString : String = "") {
 
     init {
 
-        dateTime = if (_dateTimeString.isNotEmpty()){
-            val pattern = matchPattern(_dateTimeString)
-            SimpleDateFormat(pattern, Locale.US).parse(_dateTimeString) ?: throw IllegalArgumentException("Opps!, $_dateTimeString Parsed Failed")
+        dateTime = if (dateTimeString.isNotEmpty()){
+            val currentPattern = pattern.ifEmpty { matchPattern(dateTimeString) }
+            SimpleDateFormat(currentPattern, Locale.US).parse(dateTimeString) ?: throw IllegalArgumentException("Opps!, $dateTimeString Parsed Failed, Pattern was: $currentPattern")
         }else{
             toCurrentDateTime()
         }
