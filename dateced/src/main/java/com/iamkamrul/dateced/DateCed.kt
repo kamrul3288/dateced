@@ -175,40 +175,59 @@ class DateCed(inputDateTime : String = "", pattern: String = "") {
     }
 
     //responsible for checking date time range
-    fun isInsideTheRange(fromDateTime:String,toDateTime:String):Boolean{
-        val from = SimpleDateFormat(matchPattern(fromDateTime.replaceInput()), Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
-        val to = SimpleDateFormat(matchPattern(toDateTime.replaceInput()), Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
+    fun isInsideTheRange(fromDateTime:String,toDateTime:String,pattern: String = ""):Boolean{
+        val matchedPattern = pattern.ifEmpty { matchPattern(fromDateTime.replaceInput()) }
+        val from = SimpleDateFormat(matchedPattern, Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
+        val to = SimpleDateFormat(matchedPattern, Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
         return dateTime?.after(from) == true && dateTime?.before(to) == true
     }
 
 
     //is to date is equal
-    fun isSameDateTime(fromDateTime:String):Boolean{
-        val from = SimpleDateFormat(matchPattern(fromDateTime.replaceInput()), Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
+    fun isSameDateTime(fromDateTime:String,pattern: String = ""):Boolean{
+        val matchedPattern = pattern.ifEmpty { matchPattern(fromDateTime.replaceInput()) }
+        val from = SimpleDateFormat(matchedPattern, Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
         return dateTime?.time == from.time
     }
 
 
     //predefined date time format
-    val d get() = format("EEEE")
+    val day get() = format("EEEE")
+    val d get() = format("dd")
     val y get() = format("yyyy")
+    val m get() = format("MMM")
+
     val dMy get() = format("dd MMM yyyy")
     val dM get() = format("dd MMM")
     val dMyHms get() = format("dd MMM yyyy hh:mm:ss")
     val dMyHmsA get() = format("dd MMM yyyy hh:mm:ss aa")
     val dMyHmA get() = format("dd MMM yyyy hh:mm aa")
+
+    val dMyHms24 get() = format("dd MMM yyyy HH:mm:ss")
+    val dMyHm24 get() = format("dd MMM yyyy HH:mm")
+
+
     val hM get() = format("hh:mm")
     val hMs get() = format("hh:mm:ss")
     val hMa get() = format("hh:mm aa")
     val hMsA get() = format("hh:mm:ss aa")
+
+    val hMs24 get() = format("HH:mm:ss")
+    val hM24 get() = format("HH:mm")
+    val h24 get() = format("HH")
+
+
     val sqlYMd get() = format("yyyy-MM-dd")
     val sqlYMdHm get() = format("yyyy-MM-dd hh:mm")
     val sqlYMdHms get() = format("yyyy-MM-dd hh:mm:ss")
+
     val sqlYMd24Hm get() = format("yyyy-MM-dd HH:mm")
     val sqlYMd24Hms get() = format("yyyy-MM-dd HH:mm:ss")
-    val hM24 get() = format("HH:mm")
-    val hMaDmY get() = format("hh:mm aa dd MMM yyyy")
 
+    val hmADmY get() = format("hh:mm aa dd MMM yyyy")
+    val hmsADmY get() = format("hh:mm:ss aa dd MMM yyyy")
+    val hms24DmY get() = format("HH:mm:ss dd MMM yyyy")
+    val hm24DmY get() = format("HH:mm dd MMM yyyy")
 
 }
 private fun String.replaceInput():String = this.replace("/","-")
