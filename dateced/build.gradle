@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
+    id 'maven-publish'
 }
 
 java {
@@ -15,10 +16,10 @@ tasks{
 publishing {
     publications {
         release(MavenPublication) {
-            from components["java"]
+            from components.java
             groupId = 'com.github.kamrul3288'
             artifactId = 'dateced'
-            version = '1.0.4'
+            version = '1.0.3'
         }
     }
 }
