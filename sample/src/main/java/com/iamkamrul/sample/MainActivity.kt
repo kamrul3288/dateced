@@ -3,12 +3,16 @@ package com.iamkamrul.sample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.iamkamrul.dateced.DateCed
+import com.iamkamrul.dateced.LocalizeUnit
 import com.iamkamrul.dateced.Units
+import com.iamkamrul.dateced.dateCed
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 fun main() {
+    println(DateCed.toLongCurrentDateTime())
+    println(DateCed(longDateTime = 1680427720125).day)
 
 }
 
@@ -29,9 +33,9 @@ class MainActivity : AppCompatActivity() {
         val (h,m,s) = DateCed.millisecondToHourAndMinutesAndSecond(milliseconds = 201000)
         println("$h Hours $m Minutes $s Seconds")
 
-        println(DateCed(inputDateTime = "2022-10-11").dMyHms)
+        println(DateCed(stringDateTime = "2022-10-11").dMyHms)
 
-        val(days,localizeUnit,defaultLocalize) = DateCed(inputDateTime="10-11-2022").fromNow(Units.DAY)
+        val(days,localizeUnit,defaultLocalize) = DateCed(stringDateTime="10-11-2022").fromNow(Units.DAY)
         println("$days $defaultLocalize")
 
         println(DateCed().add(days = 2).dMy)
@@ -43,10 +47,10 @@ class MainActivity : AppCompatActivity() {
         val isGreaterThan = DateCed("10-11-2022").isGreaterThan(DateCed.toCurrentDateTime())
         println(isGreaterThan)
 
-        val isInside = DateCed(inputDateTime = "31-03-2023").isInsideTheRange(fromDateTime = "27-03-2023", toDateTime = "31-03-2023")
+        val isInside = DateCed(stringDateTime = "31-03-2023").isInsideTheRange(fromDateTime = "27-03-2023", toDateTime = "31-03-2023")
         println(isInside)
 
-        val isSameDate = DateCed(inputDateTime = "31-03-2023").isSameDateTime(fromDateTime = "27-03-2023")
+        val isSameDate = DateCed(stringDateTime = "31-03-2023").isSameDateTime(fromDateTime = "27-03-2023")
         println(isSameDate)
 
 

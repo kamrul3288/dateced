@@ -15,8 +15,7 @@ private const val monthInMillSecond: Long = 30 * dayInMillSecond
 private const val yearInMillSecond: Long = 12 * monthInMillSecond
 private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
 
-class DateCed(inputDateTime : String = "", pattern: String = "") {
-    private val dateTimeString = inputDateTime.replaceInput()
+class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = "") {
     private var dateTime: Date? = null
 
     companion object{
@@ -39,12 +38,31 @@ class DateCed(inputDateTime : String = "", pattern: String = "") {
 
 
     init {
+        matchPatternsAndParse(
+            inputDateTime = stringDateTime.replaceInput(),
+            longDateTime = longDateTime,
+            pattern = pattern
+        )
+    }
 
-        dateTime = if (dateTimeString.isNotEmpty()){
-            val currentPattern = pattern.ifEmpty { matchPattern(dateTimeString) }
-            SimpleDateFormat(currentPattern, Locale.US).parse(dateTimeString) ?: throw IllegalArgumentException("Opps!, $dateTimeString Parsed Failed, Pattern was: $currentPattern")
-        }else{
-            toCurrentDateTime()
+
+    fun init(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = ""):DateCed{
+        matchPatternsAndParse(
+            inputDateTime = stringDateTime.replaceInput(),
+            longDateTime = longDateTime,
+            pattern = pattern
+        )
+        return this
+    }
+
+    private fun matchPatternsAndParse(inputDateTime : String = "", longDateTime:Long = 0L, pattern: String = ""){
+        dateTime = when{
+            inputDateTime.isNotEmpty()  -> {
+                val currentPattern = pattern.ifEmpty { matchPattern(inputDateTime) }
+                SimpleDateFormat(currentPattern, Locale.US).parse(inputDateTime) ?: throw IllegalArgumentException("Opps!, $inputDateTime Parsed Failed, Pattern was: $currentPattern")
+            }
+            longDateTime != 0L -> Date(longDateTime)
+            else-> toCurrentDateTime()
         }
     }
 
