@@ -1,4 +1,5 @@
 # Dateced
+
 Dateced is a android date time library for parsing, compare and formatting dates.
 ### [Full Documentation](doc)
 # How to
@@ -13,46 +14,63 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-    implementation "com.github.kamrul3288:dateced:1.0.2"
+    implementation "com.github.kamrul3288:dateced:1.0.4"
 }
  ```
 
-
-# Usage
-```diff
-! Use 24 hour format.
-```
-
 # Format Dates
 ```kotlin
- DateCed("2022-10-11").dMyHmsA //Output: 11 Oct 2022 12:00:00 AM
- DateCed("2022-10-11").format("dd MMM yyyy") //Output: Output: 11 Oct 2022
- DateCed().currentDateTime().sqlYMd //Output: 2022-11-24
- DateCed().currentDateTime().format("dd MMM yyyy") //Output: 24 Nov 2022
+DateCed(stringDateTime = "2023-01-01 23:00:00").dMyHmsA //Output: 01 Jan 2023 11:00:00 PM
+
+DateCed(longDateTime = 1680427720125).day //Output: Sunday
+
+DateCed(stringDateTime = "2023-01-01 23:00:00").format(pattern = "dd EEE, MMM, yyyy") //Output: 01 Sun, Jan, 2023
+
+DateCed(stringDateTime = "01 Jan 2023").hmADmY //Output: 12:00 AM 01 Jan 2023
+
+DateCed(stringDateTime = "01 Sun, Jan, 2023", pattern = "dd EEE, MMM, yyyy").hmADmY //Output: 12:00 AM 01 Jan 2023
+
+DateCed(stringDateTime = "2023-03-30T10:15:30.123Z").dMy //Output: 30 Mar 2023
 ```
 
 ## Converts Dates
 ```kotlin
-DateCed().toCurrentDateTime() //Output: Date Object
-DateCed().toLongCurrentDateLong() //Output: 1669311055052
-DateCed("2022-10-11").toMilliSecond() //Output: 1665424800000
-DateCed("2022-10-11").toDate() //Output: Date Time object
+DateCed.toCurrentDateTime() //Output: Sun Apr 02 23:29:20 BDT 2023
+    
+DateCed.toLongCurrentDateTime() //Output: 1680456560624
+
+DateCed(stringDateTime = "2023-01-01 23:00:00").toDate() //Output: Sun Jan 01 23:00:00 BDT 2023
+
+DateCed(stringDateTime = "2023-01-01 23:00:00").toMilliSecond() //Output: 1672592400000
+
+val(minutes,seconds)  = DateCed.millisecondToMinutesAndSecond(milliseconds = 1100000)
+println("$minutes minutes, $seconds second") //Output: 18 minutes, 20 second
+    
+val(hour,minute,sec)  = DateCed.millisecondToHourAndMinutesAndSecond(milliseconds = 1100000) 
+println("$hour hour, $minute minutes, $sec second") //Output:0 hour, 18 minutes, 20 second
 ```
 ## Relative Time
 ```kotlin
-DateCed("2022-10-11").fromNow() //Output: 44 days ago
-DateCed("2022-10-11").fromNow(Units.MINUTES) //Output: 64772 minutes ago
+val(days,localizeUnit,defaultLocalize) = DateCed(stringDateTime="10-11-2022").fromNow(Units.DAY)
+println("$days $defaultLocalize") //Output: 143 days ago
 ```
 
 ## Comparison Date Times
 ```kotlin
-DateCed("2022-12-11").greaterThan(DateCed("2022-10-11").toDate()) //Output: true
-DateCed("2022-12-11").lessThan(DateCed("2022-10-11").toDate()) //Output: false
+DateCed(stringDateTime = "10-11-2022").isGreaterThan(DateCed.toCurrentDateTime()) //Output: false
+DateCed(stringDateTime = "31-03-2023").isInsideTheRange(fromDateTime = "27-03-2023", toDateTime = "31-03-2023") //Output: true
 ```
 
 ## Mainipulation Date Times
 ```kotlin
-DateCed("2022-10-11").subtract(days = 1).dMy //Output: 10 Oct 2022
-DateCed("2022-10-11").add(month = 2).dMy //Output: 11 Dec 2022
+DateCed(stringDateTime = "2023-01-01").add(days = 5).sqlYMd // Output: 2023-01-06
+    
+DateCed(stringDateTime = "2023-01-01").subtract(days = 5).sqlYMd // Output: 2022-12-27
+```
+
+## Extension Function
+```kotlin
+"2023-01-01".dateCed().day  // Output: Sunday
+(167259240000).dateCed().dMyHmA  // Output: 21 Apr 1975 02:54 AM
 ```
 
