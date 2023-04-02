@@ -5,14 +5,13 @@ plugins {
 
 android {
     namespace 'com.iamkamrul.sample'
-    compileSdk 33
-
+    compileSdk AppConfig.compileSdkVersion
     defaultConfig {
         applicationId "com.iamkamrul.dateced"
-        minSdk 21
-        targetSdk 33
-        versionCode 4
-        versionName "1.0.3"
+        minSdk AppConfig.minSdkVersion
+        targetSdk AppConfig.targetSdkVersion
+        versionCode AppConfig.versionCode
+        versionName AppConfig.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,12 +32,14 @@ android {
 }
 
 dependencies {
-    implementation project(":dateced")
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation project(ModulesDependencies.dateced)
+    implementation AppDependencies.core_ktx
+    implementation AppDependencies.appcompat
+    implementation AppDependencies.material
+    implementation AppDependencies.constraint_layout
+
+
+    testImplementation AppDependencies.junit
+    androidTestImplementation AppDependencies.extJunit
+    androidTestImplementation AppDependencies.espresso
 }

@@ -1,13 +1,9 @@
 package com.iamkamrul.sample
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.iamkamrul.dateced.DateCed
-import com.iamkamrul.dateced.LocalizeUnit
 import com.iamkamrul.dateced.Units
-import com.iamkamrul.dateced.dateCed
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 fun main() {
