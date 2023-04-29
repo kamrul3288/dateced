@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.iamkamrul'
+    namespace 'com.iamkamrul.dateced'
     compileSdk AppConfig.compileSdkVersion
 
     defaultConfig {
@@ -38,7 +38,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.kamrul3288'
                 artifactId = 'dateced'
-                version = '1.0.4'
+                version = '1.0.5'
             }
         }
     }
