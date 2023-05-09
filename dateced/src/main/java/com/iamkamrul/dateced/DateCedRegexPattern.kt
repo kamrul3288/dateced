@@ -41,4 +41,5 @@ private val patterns = listOf(
     Pair(first ="""^\d{2}:\d{2} (AM|PM)$""".toRegex(), second = "hh:mm aa"),
 
     Pair(first = """^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$""".toRegex(), second = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+    Pair(first = """^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$""".toRegex(), second = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"),
 )
