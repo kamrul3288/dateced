@@ -38,7 +38,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.kamrul3288'
                 artifactId = 'dateced'
-                version = '1.0.5'
+                version = '1.0.6'
             }
         }
     }
