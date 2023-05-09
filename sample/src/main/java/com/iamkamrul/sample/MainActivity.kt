@@ -9,7 +9,7 @@ import com.iamkamrul.dateced.Units
 fun main() {
     println(DateCed.toLongCurrentDateTime())
     println(DateCed(longDateTime = 1680427720125).day)
-
+    println(DateCed(stringDateTime = "01-06-2023 13:00:00").isInsideTheRange(fromDateTime = "01-05-2023 13:00:00", toDateTime = "01-06-2023 14:00:00"))
 }
 
 class MainActivity : AppCompatActivity() {

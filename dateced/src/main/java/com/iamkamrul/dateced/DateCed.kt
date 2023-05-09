@@ -195,7 +195,6 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         val from = SimpleDateFormat(matchedPattern, Locale.US).parse(fromDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $fromDateTime Parsed Failed")
         val calender = Calendar.getInstance()
         calender.time = SimpleDateFormat(matchedPattern, Locale.US).parse(toDateTime.replaceInput())?: throw IllegalArgumentException("Opps!, $toDateTime Parsed Failed")
-        calender.add(Calendar.DATE,1)
         return dateTime?.after(from) == true && dateTime?.before(calender.time) == true
     }
 
