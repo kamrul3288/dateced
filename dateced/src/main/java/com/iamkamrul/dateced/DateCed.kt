@@ -19,6 +19,7 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
     private var dateTime: Date? = null
 
     companion object{
+        var timeZone = DateCedTimeZone.DEFAULT
         // return current date time
         fun toCurrentDateTime(): Date = Calendar.getInstance().time
 
@@ -59,7 +60,13 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         dateTime = when{
             inputDateTime.isNotEmpty()  -> {
                 val currentPattern = pattern.ifEmpty { matchPattern(inputDateTime) }
-                SimpleDateFormat(currentPattern, Locale.US).parse(inputDateTime) ?: throw IllegalArgumentException("Opps!, $inputDateTime Parsed Failed, Pattern was: $currentPattern")
+                val format =   SimpleDateFormat(currentPattern, Locale.US)
+                when(timeZone){
+                    DateCedTimeZone.UTC -> format.timeZone = TimeZone.getTimeZone("UTC")
+                    DateCedTimeZone.GMT -> format.timeZone = TimeZone.getTimeZone("GMT")
+                    else->{}
+                }
+                format.parse(inputDateTime) ?: throw IllegalArgumentException("Opps!, $inputDateTime Parsed Failed, Pattern was: $currentPattern")
             }
             longDateTime != 0L -> Date(longDateTime)
             else-> toCurrentDateTime()
