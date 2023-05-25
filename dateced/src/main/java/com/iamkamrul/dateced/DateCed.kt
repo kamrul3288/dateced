@@ -4,6 +4,7 @@ import com.iamkamrul.dateced.DateCedPattern.matchPattern
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 
@@ -15,11 +16,10 @@ private const val monthInMillSecond: Long = 30 * dayInMillSecond
 private const val yearInMillSecond: Long = 12 * monthInMillSecond
 private const val error  = "Error Occurred! Input Date Time Parse Error. Maybe Input Date time is empty"
 
-class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = "") {
+class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = "", timeZone:DateCedTimeZone =  DateCedTimeZone.LOCAL) {
     private var dateTime: Date? = null
 
     companion object{
-        var timeZone = DateCedTimeZone.DEFAULT
         // return current date time
         fun toCurrentDateTime(): Date = Calendar.getInstance().time
 
@@ -42,21 +42,23 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         matchPatternsAndParse(
             inputDateTime = stringDateTime.replaceInput(),
             longDateTime = longDateTime,
-            pattern = pattern
+            pattern = pattern,
+            timeZone = timeZone
         )
     }
 
 
-    fun init(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = ""):DateCed{
+    fun init(stringDateTime : String = "", longDateTime:Long = 0L, pattern: String = "",timeZone: DateCedTimeZone = DateCedTimeZone.LOCAL):DateCed{
         matchPatternsAndParse(
             inputDateTime = stringDateTime.replaceInput(),
             longDateTime = longDateTime,
-            pattern = pattern
+            pattern = pattern,
+            timeZone = timeZone
         )
         return this
     }
 
-    private fun matchPatternsAndParse(inputDateTime : String = "", longDateTime:Long = 0L, pattern: String = ""){
+    private fun matchPatternsAndParse(inputDateTime : String = "", longDateTime:Long = 0L, pattern: String = "",timeZone:DateCedTimeZone){
         dateTime = when{
             inputDateTime.isNotEmpty()  -> {
                 val currentPattern = pattern.ifEmpty { matchPattern(inputDateTime) }
@@ -64,7 +66,7 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
                 when(timeZone){
                     DateCedTimeZone.UTC -> format.timeZone = TimeZone.getTimeZone("UTC")
                     DateCedTimeZone.GMT -> format.timeZone = TimeZone.getTimeZone("GMT")
-                    else->{}
+                    else-> format.timeZone = TimeZone.getDefault()
                 }
                 format.parse(inputDateTime) ?: throw IllegalArgumentException("Opps!, $inputDateTime Parsed Failed, Pattern was: $currentPattern")
             }
@@ -73,11 +75,6 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         }
     }
 
-    /*
-    * this method is responsible for input date time pattern matching
-    * Only Two pattern support right now / and -
-    * If pattern doesn't match then throw an exception
-    **/
 
     /*
     * responsible for formatting input date after pattern match
@@ -94,6 +91,36 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         }
     }
 
+    /*
+    * responsible for converting date in specific time zone
+    * If datetime is empty then throw an exception
+    **/
+    fun timeZone(timeZone: DateCedTimeZone):DateCed{
+        val originalTimeZone = TimeZone.getDefault()
+
+        when(timeZone){
+            DateCedTimeZone.LOCAL ->{
+                val timeZoneUtc = TimeZone.getTimeZone("UTC")
+                val utcOffset = originalTimeZone.rawOffset - timeZoneUtc.rawOffset
+                println(utcOffset)
+                dateTime = Date(dateTime?.time?.plus(utcOffset) ?: throw IllegalArgumentException("Date time is null: $dateTime"))
+            }
+            DateCedTimeZone.UTC -> {
+                val timeZoneUtc = TimeZone.getTimeZone("UTC")
+                val utcOffset = timeZoneUtc.rawOffset - originalTimeZone.rawOffset
+                println(utcOffset)
+                dateTime = Date(dateTime?.time?.plus(utcOffset) ?: throw IllegalArgumentException("Date time is null: $dateTime"))
+            }
+            DateCedTimeZone.GMT -> {
+                val timeZoneUtc = TimeZone.getTimeZone("GMT")
+                val utcOffset = timeZoneUtc.rawOffset - originalTimeZone.rawOffset
+                dateTime = Date(dateTime?.time?.plus(utcOffset) ?: throw IllegalArgumentException("Date time is null: $dateTime"))
+            }
+        }
+
+        return this
+    }
+
 
 
     /*
@@ -102,8 +129,6 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
     **/
     fun fromNow(units: Units = Units.DEFAULT):Triple<Long,LocalizeUnit,String>{
         dateTime?.let { dateTime->
-
-
 
             val now = toLongCurrentDateTime()
             val diff = now - dateTime.time
@@ -213,6 +238,20 @@ class DateCed(stringDateTime : String = "", longDateTime:Long = 0L, pattern: Str
         return dateTime?.time == from.time
     }
 
+
+    fun differenceBetween(date: Date,unit: DiffUnits = DiffUnits.MILLISECOND):Long{
+        return dateTime?.let {dateTime->
+            val difference = dateTime.time.minus(date.time)
+            when(unit){
+                DiffUnits.MILLISECOND -> difference
+                DiffUnits.SECOND -> TimeUnit.MILLISECONDS.toSeconds(difference)
+                DiffUnits.DAY -> TimeUnit.MILLISECONDS.toDays(difference)
+                DiffUnits.HOUR -> TimeUnit.MILLISECONDS.toHours(difference)
+                DiffUnits.MINUTES -> TimeUnit.MILLISECONDS.toMinutes(difference)
+            }
+        }?:0L
+
+    }
 
     //predefined date time format
     val day get() = format("EEEE")

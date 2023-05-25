@@ -4,8 +4,8 @@ private object DateCedInstance {
     val dateCed:DateCed = DateCed()
 }
 
-fun String.dateCed(pattern:String = ""):DateCed{
-    DateCedInstance.dateCed.init(stringDateTime = this,pattern = pattern)
+fun String.dateCed(pattern:String = "", timeZone: DateCedTimeZone = DateCedTimeZone.LOCAL):DateCed{
+    DateCedInstance.dateCed.init(stringDateTime = this,pattern = pattern, timeZone = timeZone)
     return DateCedInstance.dateCed
 }
 

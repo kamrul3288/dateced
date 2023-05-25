@@ -3,14 +3,14 @@ package com.iamkamrul.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.iamkamrul.dateced.DateCed
+import com.iamkamrul.dateced.DateCedTimeZone
+import com.iamkamrul.dateced.DiffUnits
 import com.iamkamrul.dateced.Units
+import com.iamkamrul.dateced.dateCed
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
-
-fun main() {
-    println(DateCed.toLongCurrentDateTime())
-    println(DateCed(longDateTime = 1680427720125).day)
-    println(DateCed(stringDateTime = "01-06-2023 13:00:00").isInsideTheRange(fromDateTime = "01-05-2023 13:00:00", toDateTime = "01-06-2023 14:00:00"))
-}
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
