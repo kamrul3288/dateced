@@ -14,7 +14,7 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-    implementation "com.github.kamrul3288:dateced:1.0.6"
+    implementation "com.github.kamrul3288:dateced:1.0.7"
 }
  ```
 
