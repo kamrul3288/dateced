@@ -9,5 +9,6 @@ object DependenciesVersion {
     const val junit_version = "4.13.2"
     const val junit_ext_version = "1.1.3"
     const val espresso_core_version = "3.4.0"
+    const val mockito = "5.1.0"
 
 }

@@ -11,4 +11,5 @@ object AppDependencies {
     const val junit = "junit:junit:${DependenciesVersion.junit_version}"
     const val extJunit = "androidx.test.ext:junit:${DependenciesVersion.junit_ext_version}"
     const val espresso = "androidx.test.espresso:espresso-core:${DependenciesVersion.espresso_core_version}"
+    const val mockito = "org.mockito.kotlin:mockito-kotlin:${DependenciesVersion.mockito}"
 }

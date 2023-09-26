@@ -1,5 +1,6 @@
 package com.iamkamrul.dateced
 
+import org.jetbrains.annotations.TestOnly
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -7,6 +8,9 @@ import java.time.ZonedDateTime
 
 class DateCed private  constructor(){
     private lateinit var zonedDateTime: ZonedDateTime
+    private var getter = Getter
+    private var manipulator = Manipulator
+    private var query = Query
 
     private companion object{
         private var instance: DateCed? = null
@@ -27,7 +31,7 @@ class DateCed private  constructor(){
         fun<T> parse(
             dateTime:T,
             pattern:String? = null,
-            zoneId:DateCedTimeZone = DateCedTimeZone.LOCAL
+            zoneId:TimeZoneId = TimeZoneId.LOCAL
         ): DateCed {
             val instance = invoke()
             instance.zonedDateTime = dateTime.zonedDateTime(pattern = pattern,zoneId = zoneId)
@@ -37,21 +41,21 @@ class DateCed private  constructor(){
 
 
     //----------getter---------------------
-    fun millisecond() = Getter.millisecond(zonedDateTime)
-    fun second() = Getter.second(zonedDateTime)
-    fun minute() = Getter.minute(zonedDateTime)
-    fun hour() = Getter.hour(zonedDateTime)
-    fun year() = Getter.year(zonedDateTime)
+    fun millisecond() = getter.millisecond(zonedDateTime)
+    fun second() = getter.second(zonedDateTime)
+    fun minute() = getter.minute(zonedDateTime)
+    fun hour() = getter.hour(zonedDateTime)
+    fun year() = getter.year(zonedDateTime)
 
-    fun dayOfWeek(): DayOfWeek = Getter.dayOfWeek(zonedDateTime)
-    fun dayOfMonth() = Getter.dayOfMonth(zonedDateTime)
-    fun dayOfYear() = Getter.dayOfYear(zonedDateTime)
+    fun dayOfWeek(): DayOfWeek = getter.dayOfWeek(zonedDateTime)
+    fun dayOfMonth() = getter.dayOfMonth(zonedDateTime)
+    fun dayOfYear() = getter.dayOfYear(zonedDateTime)
     fun dateTime() = zonedDateTime
-    fun toMillisecond() = Getter.toMillisecond(zonedDateTime)
+    fun toMillisecond() = getter.toMillisecond(zonedDateTime)
 
     //---------------- Manipulator------------------------
     fun plus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0, years: Long = 0): DateCed {
-        zonedDateTime = Manipulator.plus(
+        zonedDateTime = manipulator.plus(
             zonedDateTime = zonedDateTime,
             seconds = seconds,
             minutes = minutes,
@@ -63,8 +67,8 @@ class DateCed private  constructor(){
         return this
     }
 
-    fun minus(seconds: Long, minutes: Long, hours: Long, days: Long, weeks: Long, years: Long): DateCed {
-        zonedDateTime = Manipulator.minus(
+    fun minus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0, years: Long = 0): DateCed {
+        zonedDateTime = manipulator.minus(
             zonedDateTime = zonedDateTime,
             seconds = seconds,
             minutes = minutes,
@@ -77,139 +81,151 @@ class DateCed private  constructor(){
     }
 
     fun toLocal(): DateCed {
-        zonedDateTime = Manipulator.toLocal(zonedDateTime = zonedDateTime)
+        zonedDateTime = manipulator.toLocal(zonedDateTime = zonedDateTime)
         return this
     }
 
     fun toUTC(): DateCed {
-        zonedDateTime = Manipulator.toUTC(zonedDateTime = zonedDateTime)
+        zonedDateTime = manipulator.toUTC(zonedDateTime = zonedDateTime)
         return this
     }
 
-    fun toGMT(): DateCed {
-        zonedDateTime = Manipulator.toGMT(zonedDateTime = zonedDateTime)
-        return this
-    }
-
-    fun<T> fromNow(
+    fun<T:Any> fromNow(
         dateTime: T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
         fromNowUnit: FromNowUnit
     ):Pair<Long,FromNowLocalizeUnit>{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Manipulator.fromNow(dateTimeZone, fromNowUnit)
+        return manipulator.fromNow(
+            dateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern,
+            fromNowUnit = fromNowUnit
+        )
     }
 
-    fun<T> timeDifference(
+    fun<T:Any> timeDifference(
         dateTime: T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
         unit: TimeDifferenceUnit
     ):Long{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Manipulator.calculateTimeDifference(zonedDateTime, dateTimeZone, unit)
+        return manipulator.calculateTimeDifference(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern,
+            units = unit
+        )
     }
 
 
     //-------------- Query--------------------------
-    fun<T> isBefore(
+    fun<T:Any> isBefore(
         dateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean {
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isBefore(
-            firstDateTime = zonedDateTime,
+        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return query.isBefore(
+            firstZonedDateTime = zonedDateTime,
             secondDateTime = dateTimeZone,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun<T> isEqualOrBefore(
+    fun<T:Any> isEqualOrBefore(
         dateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isEqualOrBefore(
-            firstDateTime = zonedDateTime,
-            secondDateTime = dateTimeZone,
+        return query.isEqualOrBefore(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun<T> isAfter(
+    fun<T:Any> isAfter(
         dateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean {
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isAfter(
-            firstDateTime = zonedDateTime,
-            secondDateTime = dateTimeZone,
+        return query.isAfter(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun<T> isEqualOrAfter(
+    fun<T:Any> isEqualOrAfter(
         dateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isEqualOrAfter(
-            firstDateTime = zonedDateTime,
-            secondDateTime = dateTimeZone,
+        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return query.isEqualOrAfter(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun<T> isEqual(
+    fun<T:Any> isEqual(
         dateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isEqualOrAfter(
-            firstDateTime = zonedDateTime,
-            secondDateTime = dateTimeZone,
+        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return query.isEqualOrAfter(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = dateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun<S,T> isBetween(
+    fun<S:Any,T:Any> isBetween(
         secondDateTime:S,
         thirdDateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val secondDateTimeZone = secondDateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        val thirdDateTimeZone = thirdDateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isBetween(
-            firstDateTime = zonedDateTime,
-            secondDateTime = secondDateTimeZone,
-            thisDateTime = thirdDateTimeZone
+        return query.isBetween(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = secondDateTime,
+            thirdDateTime = thirdDateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
 
-    fun<S,T> isEqualOrBetween(
+    fun<S:Any,T:Any> isEqualOrBetween(
         secondDateTime:S,
         thirdDateTime:T,
-        dateCedTimeZone: DateCedTimeZone = DateCedTimeZone.LOCAL,
+        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val secondDateTimeZone = secondDateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        val thirdDateTimeZone = thirdDateTime.zonedDateTime(pattern = pattern, zoneId = dateCedTimeZone)
-        return Query.isEqualOrBetween(
-            firstDateTime = zonedDateTime,
-            secondDateTime = secondDateTimeZone,
-            thisDateTime = thirdDateTimeZone
+        return query.isEqualOrBetween(
+            firstZonedDateTime = zonedDateTime,
+            secondDateTime = secondDateTime,
+            thirdDateTime = thirdDateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
         )
     }
 
-    fun isTodayBetweenDaysOfWeek(days:List<DayOfWeek>) = Query.isTodayBetweenDaysOfWeek(days)
+    fun isTodayBetweenDaysOfWeek(days:List<DayOfWeek>) = query.isTodayBetweenDaysOfWeek(days)
 
-    fun isisLeapYear(year:Int) = Query.isisLeapYear(year)
+    fun isisLeapYear(year:Int) = query.isisLeapYear(year)
 
     //--------------format date------------------
-    fun format(pattern:String,zoneId: DateCedTimeZone = DateCedTimeZone.LOCAL):String = zonedDateTime.format(pattern = pattern,zoneId = zoneId)
+    fun format(pattern:String,zoneId: TimeZoneId = TimeZoneId.LOCAL):String = zonedDateTime.format(pattern = pattern,zoneId = zoneId)
 
     val day get() = format("EEEE")
     val d get() = format("dd")
@@ -247,4 +263,24 @@ class DateCed private  constructor(){
     val hmsADmY get() = format("hh:mm:ss a dd MMM yyyy")
     val hms24DmY get() = format("HH:mm:ss dd MMM yyyy")
     val hm24DmY get() = format("HH:mm dd MMM yyyy")
+
+    @TestOnly
+    internal fun setTestGetter(getter:Getter){
+        this.getter = getter
+    }
+
+    @TestOnly
+    internal fun setTestManipulator(manipulator:Manipulator){
+        this.manipulator = manipulator
+    }
+
+    @TestOnly
+    internal fun setTestManipulator(query:Query){
+        this.query = query
+    }
+
+    @TestOnly
+    internal fun setTestZonedDateTime(zonedDateTime: ZonedDateTime){
+        this.zonedDateTime = zonedDateTime
+    }
 }

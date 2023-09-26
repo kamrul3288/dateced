@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 internal fun <T> T.zonedDateTime(
     pattern: String?,
-    zoneId: DateCedTimeZone
+    zoneId: TimeZoneId
 ):ZonedDateTime{
     return when(this){
         is String ->this.parseFromString(pattern,zoneId)
@@ -20,7 +20,7 @@ internal fun <T> T.zonedDateTime(
     }
 }
 
-private fun String.parseFromString(pattern:String?, zoneId: DateCedTimeZone):ZonedDateTime{
+private fun String.parseFromString(pattern:String?, zoneId: TimeZoneId):ZonedDateTime{
     val formatter = DateTimeFormatter.ofPattern(pattern ?: DateCedPattern.matchPattern(this))
     return try {
         LocalDateTime.parse(this,formatter).atZone(getZoneId(zoneId))
@@ -29,22 +29,22 @@ private fun String.parseFromString(pattern:String?, zoneId: DateCedTimeZone):Zon
     }
 }
 
-private fun Long.parseFromMilliSeconds(zoneId:DateCedTimeZone):ZonedDateTime {
+private fun Long.parseFromMilliSeconds(zoneId:TimeZoneId):ZonedDateTime {
     val instant = Instant.ofEpochMilli(this)
     return instant.atZone(getZoneId(zoneId))
 }
 
 
-private fun getZoneId(zone: DateCedTimeZone): ZoneId {
+private fun getZoneId(zone: TimeZoneId): ZoneId {
     return when(zone){
-        DateCedTimeZone.LOCAL -> ZoneId.systemDefault()
-        DateCedTimeZone.UTC -> ZoneId.of("UTC")
-        DateCedTimeZone.GMT -> ZoneId.of("GMT")
+        TimeZoneId.LOCAL -> ZoneId.systemDefault()
+        TimeZoneId.UTC -> ZoneId.of("UTC")
+        TimeZoneId.GMT -> ZoneId.of("GMT")
     }
 }
 
 
-internal fun ZonedDateTime.format(pattern:String,zoneId: DateCedTimeZone):String{
+internal fun ZonedDateTime.format(pattern:String,zoneId: TimeZoneId):String{
     val formatter = DateTimeFormatter.ofPattern(pattern)
     return this.withZoneSameInstant(getZoneId(zoneId)).format(formatter)
 }

@@ -39,6 +39,7 @@ dependencies {
     testImplementation AppDependencies.junit
     androidTestImplementation AppDependencies.extJunit
     androidTestImplementation AppDependencies.espresso
+    testImplementation AppDependencies.mockito
 }
 
 afterEvaluate {

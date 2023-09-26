@@ -62,10 +62,17 @@ internal object Manipulator {
         return instant.atZone(ZoneId.of("GMT"))
     }
 
-    fun fromNow(zonedDateTime: ZonedDateTime, fromNowUnit: FromNowUnit):Pair<Long, FromNowLocalizeUnit>{
+    fun<T:Any> fromNow(
+        dateTime: T,
+        pattern: String? = null,
+        timeZoneId: TimeZoneId,
+        fromNowUnit: FromNowUnit
+    ):Pair<Long, FromNowLocalizeUnit>{
+
         val now  = LocalDateTime.now().atZone(ZoneId.systemDefault())
-        val duration = Duration.between(now, zonedDateTime).abs()
-        val period = Period.between(now.toLocalDate(), zonedDateTime.toLocalDate()).normalized()
+        val previous = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        val duration = Duration.between(now, previous).abs()
+        val period = Period.between(now.toLocalDate(), previous.toLocalDate()).normalized()
 
         return when(fromNowUnit){
             FromNowUnit.DEFAULT -> when{
@@ -85,8 +92,16 @@ internal object Manipulator {
         }
     }
 
-    fun calculateTimeDifference(firstDateTime: ZonedDateTime, secondDateTime: ZonedDateTime, units: TimeDifferenceUnit):Long{
-        val duration = Duration.between(firstDateTime, secondDateTime).abs()
+    
+    fun<T:Any> calculateTimeDifference(
+        firstZonedDateTime: ZonedDateTime,
+        secondDateTime: T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
+        units: TimeDifferenceUnit,
+    ):Long{
+        val secondDateTimeZone = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        val duration = Duration.between(firstZonedDateTime, secondDateTimeZone).abs()
         return when(units){
             TimeDifferenceUnit.MILLISECOND -> duration.seconds * 1000
             TimeDifferenceUnit.SECOND -> duration.seconds

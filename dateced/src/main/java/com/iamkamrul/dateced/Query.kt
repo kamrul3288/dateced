@@ -6,56 +6,87 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 internal object Query {
-    fun isBefore(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime
+    fun<T:Any> isBefore(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean {
-        return firstDateTime.isBefore(secondDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isBefore(secondZonedDateTime)
     }
 
-    fun isEqualOrBefore(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime
+    fun<T:Any> isEqualOrBefore(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return firstDateTime.isBefore(secondDateTime) || firstDateTime.isEqual(secondDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isBefore(secondZonedDateTime) || firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun isAfter(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime
+    fun<T:Any> isAfter(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return firstDateTime.isAfter(secondDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isAfter(secondZonedDateTime)
     }
 
-    fun isEqualOrAfter(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime
+    fun<T:Any> isEqualOrAfter(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return firstDateTime.isAfter(secondDateTime) || firstDateTime.isEqual(secondDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isAfter(secondZonedDateTime) || firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun isEqual(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime
+    fun<T:Any> isEqual(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return firstDateTime.isEqual(secondDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun isBetween(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime,
-        thisDateTime:ZonedDateTime,
+    fun<S:Any,T:Any> isBetween(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:S,
+        thirdDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return firstDateTime.isAfter(secondDateTime) && firstDateTime.isBefore(thisDateTime)
+        val secondZonedDateTime = secondDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        val thirdZonedDateTime = thirdDateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
+        return firstZonedDateTime.isAfter(secondZonedDateTime) && firstZonedDateTime.isBefore(thirdZonedDateTime)
     }
 
 
-    fun isEqualOrBetween(
-        firstDateTime:ZonedDateTime,
-        secondDateTime:ZonedDateTime,
-        thisDateTime:ZonedDateTime,
+    fun<S:Any,T:Any> isEqualOrBetween(
+        firstZonedDateTime:ZonedDateTime,
+        secondDateTime:S,
+        thirdDateTime:T,
+        timeZoneId: TimeZoneId,
+        pattern: String? = null,
     ):Boolean{
-        return isEqualOrAfter(firstDateTime,secondDateTime) && isEqualOrBefore(firstDateTime,thisDateTime)
+        return isEqualOrAfter(
+            firstZonedDateTime = firstZonedDateTime,
+            secondDateTime = secondDateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
+        ) && isEqualOrBefore(
+            firstZonedDateTime = firstZonedDateTime,
+            secondDateTime = thirdDateTime,
+            timeZoneId = timeZoneId,
+            pattern = pattern
+        )
     }
 
     fun isTodayBetweenDaysOfWeek(
