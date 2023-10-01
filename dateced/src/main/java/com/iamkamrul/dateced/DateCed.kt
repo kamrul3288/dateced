@@ -68,7 +68,7 @@ class DateCed private  constructor(){
         return this
     }
 
-    fun minus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0, years: Long = 0): DateCed {
+    fun minus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0,months: Long = 0, years: Long = 0): DateCed {
         zonedDateTime = manipulator.minus(
             zonedDateTime = zonedDateTime,
             seconds = seconds,
@@ -76,6 +76,7 @@ class DateCed private  constructor(){
             hours = hours,
             days = days,
             weeks = weeks,
+            months = months,
             years = years
         )
         return this

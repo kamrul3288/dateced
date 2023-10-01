@@ -36,16 +36,17 @@ internal object Manipulator {
         hours: Long,
         days: Long,
         weeks: Long,
+        months:Long,
         years: Long,
 
         ):ZonedDateTime{
-        zonedDateTime.minusSeconds(seconds)
-        zonedDateTime.minusMinutes(minutes)
-        zonedDateTime.minusHours(hours)
-        zonedDateTime.minusDays(days)
-        zonedDateTime.minusWeeks(weeks)
-        zonedDateTime.minusYears(years)
-        return zonedDateTime
+        return zonedDateTime.minusSeconds(seconds)
+            .minusMinutes(minutes)
+            .minusHours(hours)
+            .minusDays(days)
+            .minusWeeks(weeks)
+            .minusMonths(months)
+            .minusYears(years)
     }
 
     fun toLocal(zonedDateTime: ZonedDateTime):ZonedDateTime{
