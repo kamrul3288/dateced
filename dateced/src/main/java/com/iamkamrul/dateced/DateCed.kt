@@ -54,7 +54,7 @@ class DateCed private  constructor(){
     fun toMillisecond() = getter.toMillisecond(zonedDateTime)
 
     //---------------- Manipulator------------------------
-    fun plus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0, years: Long = 0): DateCed {
+    fun plus(seconds: Long = 0, minutes: Long = 0, hours: Long = 0, days: Long = 0, weeks: Long = 0, months:Long = 0L, years: Long = 0): DateCed {
         zonedDateTime = manipulator.plus(
             zonedDateTime = zonedDateTime,
             seconds = seconds,
@@ -62,6 +62,7 @@ class DateCed private  constructor(){
             hours = hours,
             days = days,
             weeks = weeks,
+            months = months,
             years = years
         )
         return this
