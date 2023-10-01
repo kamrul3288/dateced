@@ -166,7 +166,6 @@ class DateCed private  constructor(){
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
         return query.isEqualOrAfter(
             firstZonedDateTime = zonedDateTime,
             secondDateTime = dateTime,
@@ -180,7 +179,6 @@ class DateCed private  constructor(){
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
     ):Boolean{
-        val dateTimeZone = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
         return query.isEqualOrAfter(
             firstZonedDateTime = zonedDateTime,
             secondDateTime = dateTime,
