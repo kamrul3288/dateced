@@ -6,7 +6,7 @@ Dateced is a android date time library for parsing, compare and formatting dates
 Step 1. Add the JitPack repository to your build file
 ```gradle
 allprojects {
-  repositories {
+  repositories {Cancel changes
     maven {url 'https://jitpack.io'}
   }
 }
@@ -14,7 +14,7 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-    implementation "com.github.kamrul3288:dateced:1.0.7"
+    implementation "com.github.kamrul3288:dateced:1.0.8"
 }
  ```
 
