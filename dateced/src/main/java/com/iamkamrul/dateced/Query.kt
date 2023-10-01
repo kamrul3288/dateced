@@ -6,7 +6,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 internal object Query {
-    fun<T:Any> isBefore(
+    fun<T> isBefore(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:T,
         timeZoneId: TimeZoneId,
@@ -16,7 +16,7 @@ internal object Query {
         return firstZonedDateTime.isBefore(secondZonedDateTime)
     }
 
-    fun<T:Any> isEqualOrBefore(
+    fun<T> isEqualOrBefore(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:T,
         timeZoneId: TimeZoneId,
@@ -26,7 +26,7 @@ internal object Query {
         return firstZonedDateTime.isBefore(secondZonedDateTime) || firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun<T:Any> isAfter(
+    fun<T> isAfter(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:T,
         timeZoneId: TimeZoneId,
@@ -36,7 +36,7 @@ internal object Query {
         return firstZonedDateTime.isAfter(secondZonedDateTime)
     }
 
-    fun<T:Any> isEqualOrAfter(
+    fun<T> isEqualOrAfter(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:T,
         timeZoneId: TimeZoneId,
@@ -46,7 +46,7 @@ internal object Query {
         return firstZonedDateTime.isAfter(secondZonedDateTime) || firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun<T:Any> isEqual(
+    fun<T> isEqual(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:T,
         timeZoneId: TimeZoneId,
@@ -56,7 +56,7 @@ internal object Query {
         return firstZonedDateTime.isEqual(secondZonedDateTime)
     }
 
-    fun<S:Any,T:Any> isBetween(
+    fun<S,T> isBetween(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:S,
         thirdDateTime:T,
@@ -69,7 +69,7 @@ internal object Query {
     }
 
 
-    fun<S:Any,T:Any> isEqualOrBetween(
+    fun<S,T> isEqualOrBetween(
         firstZonedDateTime:ZonedDateTime,
         secondDateTime:S,
         thirdDateTime:T,

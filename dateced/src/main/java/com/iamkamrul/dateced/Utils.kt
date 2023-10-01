@@ -16,7 +16,8 @@ internal fun <T> T.zonedDateTime(
         is String ->this.parseFromString(pattern,zoneId)
         is Long ->this.parseFromMilliSeconds(zoneId)
         is Int ->this.toLong().parseFromMilliSeconds(zoneId)
-        else-> throw IllegalArgumentException("$this not supported: Support only Int, long and String")
+        is ZonedDateTime ->this
+        else-> throw IllegalArgumentException("$this not supported: Support only ZonedDateTime, Int, long and String")
     }
 }
 

@@ -64,7 +64,7 @@ internal object Manipulator {
         return instant.atZone(ZoneId.of("GMT"))
     }
 
-    fun<T:Any> fromNow(
+    fun<T> fromNow(
         dateTime: T,
         pattern: String? = null,
         timeZoneId: TimeZoneId,
@@ -95,7 +95,7 @@ internal object Manipulator {
     }
 
     
-    fun<T:Any> calculateTimeDifference(
+    fun<T> calculateTimeDifference(
         firstZonedDateTime: ZonedDateTime,
         secondDateTime: T,
         timeZoneId: TimeZoneId,

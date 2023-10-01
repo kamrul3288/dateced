@@ -92,7 +92,7 @@ class DateCed private  constructor(){
         return this
     }
 
-    fun<T:Any> fromNow(
+    fun<T> fromNow(
         dateTime: T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -106,7 +106,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<T:Any> timeDifference(
+    fun<T> timeDifference(
         dateTime: T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -123,7 +123,7 @@ class DateCed private  constructor(){
 
 
     //-------------- Query--------------------------
-    fun<T:Any> isBefore(
+    fun<T> isBefore(
         dateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -137,7 +137,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<T:Any> isEqualOrBefore(
+    fun<T> isEqualOrBefore(
         dateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -150,7 +150,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<T:Any> isAfter(
+    fun<T> isAfter(
         dateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -163,7 +163,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<T:Any> isEqualOrAfter(
+    fun<T> isEqualOrAfter(
         dateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -176,7 +176,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<T:Any> isEqual(
+    fun<T> isEqual(
         dateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
         pattern: String? = null,
@@ -189,7 +189,7 @@ class DateCed private  constructor(){
         )
     }
 
-    fun<S:Any,T:Any> isBetween(
+    fun<S,T> isBetween(
         secondDateTime:S,
         thirdDateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
@@ -205,7 +205,7 @@ class DateCed private  constructor(){
     }
 
 
-    fun<S:Any,T:Any> isEqualOrBetween(
+    fun<S,T> isEqualOrBetween(
         secondDateTime:S,
         thirdDateTime:T,
         timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
