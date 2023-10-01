@@ -64,17 +64,14 @@ internal object Manipulator {
         return instant.atZone(ZoneId.of("GMT"))
     }
 
-    fun<T> fromNow(
-        dateTime: T,
-        pattern: String? = null,
-        timeZoneId: TimeZoneId,
+    fun fromNow(
+        previousZonedDateTime: ZonedDateTime,
         fromNowUnit: FromNowUnit
     ):Pair<Long, FromNowLocalizeUnit>{
 
         val now  = LocalDateTime.now().atZone(ZoneId.systemDefault())
-        val previous = dateTime.zonedDateTime(pattern = pattern, zoneId = timeZoneId)
-        val duration = Duration.between(now, previous).abs()
-        val period = Period.between(now.toLocalDate(), previous.toLocalDate()).normalized()
+        val duration = Duration.between(now, previousZonedDateTime).abs()
+        val period = Period.between(now.toLocalDate(), previousZonedDateTime.toLocalDate()).normalized()
 
         return when(fromNowUnit){
             FromNowUnit.DEFAULT -> when{

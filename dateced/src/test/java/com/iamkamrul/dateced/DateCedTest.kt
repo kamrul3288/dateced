@@ -227,15 +227,13 @@ class DateCedTest {
 
     @Test
     fun `fromNow() should invoke Manipulator fromNow()`(){
+        dateCed.setTestZonedDateTime(zonedDateTime)
         dateCed.fromNow(
-            dateTime = "2023-01-01",
             fromNowUnit = FromNowUnit.DAY,
-            timeZoneId = TimeZoneId.LOCAL
         )
         verify(manipulator).fromNow(
-            dateTime = "2023-01-01",
+            previousZonedDateTime = zonedDateTime,
             fromNowUnit =FromNowUnit.DAY,
-            timeZoneId = TimeZoneId.LOCAL
         )
     }
 

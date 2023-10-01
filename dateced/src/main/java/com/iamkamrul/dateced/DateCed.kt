@@ -92,16 +92,11 @@ class DateCed private  constructor(){
         return this
     }
 
-    fun<T> fromNow(
-        dateTime: T,
-        timeZoneId: TimeZoneId = TimeZoneId.LOCAL,
-        pattern: String? = null,
+    fun fromNow(
         fromNowUnit: FromNowUnit
     ):Pair<Long,FromNowLocalizeUnit>{
         return manipulator.fromNow(
-            dateTime = dateTime,
-            timeZoneId = timeZoneId,
-            pattern = pattern,
+            previousZonedDateTime = zonedDateTime,
             fromNowUnit = fromNowUnit
         )
     }
