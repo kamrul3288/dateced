@@ -155,7 +155,7 @@ class DateCedTest {
     @Test
     fun `plus() should invoke Manipulator_plus()`(){
         dateCed.plus()
-        verify(manipulator).plus(any(), any(),any(),any(), any(), any(), any())
+        verify(manipulator).plus(any(), any(),any(),any(), any(), any(), any(), any())
     }
 
     @Test
@@ -169,6 +169,7 @@ class DateCedTest {
             hours = eq(0),
             days = eq(0),
             weeks = eq(0),
+            months = eq(0),
             years = eq(1),
         )
     }
@@ -177,7 +178,7 @@ class DateCedTest {
     @Test
     fun `minus() should invoke Manipulator_minus()`(){
         dateCed.minus()
-        verify(manipulator).minus(any(), any(),any(),any(), any(), any(), any())
+        verify(manipulator).minus(any(), any(),any(),any(), any(), any(), any(), any())
     }
 
     @Test
@@ -191,6 +192,7 @@ class DateCedTest {
             hours = eq(0),
             days = eq(0),
             weeks = eq(0),
+            months = eq(0),
             years = eq(0),
         )
     }
