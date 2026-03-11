@@ -71,7 +71,10 @@ internal object Manipulator {
 
         val now  = LocalDateTime.now().atZone(ZoneId.systemDefault())
         val duration = Duration.between(now, previousZonedDateTime).abs()
-        val period = Period.between(now.toLocalDate(), previousZonedDateTime.toLocalDate()).normalized()
+        var period = Period.between(now.toLocalDate(), previousZonedDateTime.toLocalDate()).normalized()
+        if (period.isNegative) {
+            period = period.negated()
+        }
 
         return when(fromNowUnit){
             FromNowUnit.DEFAULT -> when{

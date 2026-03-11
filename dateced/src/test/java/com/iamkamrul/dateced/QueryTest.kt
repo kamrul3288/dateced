@@ -82,7 +82,8 @@ class QueryTest {
 
     @Test
     fun isTodayBetweenDaysOfWeek() {
-        val result = query.isTodayBetweenDaysOfWeek(listOf(DayOfWeek.SUNDAY))
+        val today = java.time.LocalDateTime.now().dayOfWeek
+        val result = query.isTodayBetweenDaysOfWeek(listOf(today))
         assert(result)
     }
 

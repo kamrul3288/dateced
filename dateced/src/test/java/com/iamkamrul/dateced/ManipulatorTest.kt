@@ -73,7 +73,7 @@ class ManipulatorTest {
 
     @Test
     fun fromNow() {
-        val previousTime = LocalDateTime.of(2025,1,1,1,1,1).atZone(ZoneId.systemDefault())
+        val previousTime = LocalDateTime.now().minusYears(1).minusMonths(1).atZone(ZoneId.systemDefault())
         val result = manipulator.fromNow(previousTime, fromNowUnit = FromNowUnit.YEAR)
         assertEquals(result.first,1)
     }
