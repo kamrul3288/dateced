@@ -6,7 +6,7 @@ android {
     namespace = "com.iamkamrul.sample"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
-    defaultConfig {
+    defaultConfig.apply {
         applicationId = "com.iamkamrul.dateced"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
@@ -25,16 +25,20 @@ android {
             )
         }
     }
-    compileOptions {
+    compileOptions.apply {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlin {
+    kotlin.apply {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -42,6 +46,7 @@ dependencies {
     implementation(project(":dateced"))
     coreLibraryDesugaring(libs.desugar)
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)

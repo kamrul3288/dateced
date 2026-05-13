@@ -111,3 +111,8 @@ lint/tmp/
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/codeStyles/Project.xml
 /.idea/.gitignore
+
+secret-key.asc
+*.jks
+*.keystore
+secring.gpg
