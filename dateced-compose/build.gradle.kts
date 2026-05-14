@@ -40,7 +40,7 @@ mavenPublishing {
     coordinates(
         groupId    = "io.github.kamrul3288",
         artifactId = "dateced-compose",
-        version    = "2.1.0",
+        version    = "2.2.0",
     )
 
     pom {
