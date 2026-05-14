@@ -2,11 +2,55 @@
 
 **A Kotlin Multiplatform date/time library inspired by PHP Carbon.**
 
-DateCed makes date parsing, formatting, arithmetic, and relative-time display effortless across Android (Compose + XML), JVM, and future KMP targets — all with a clean, fluent API.
+DateCed makes date parsing, formatting, arithmetic, and relative-time display effortless across Android, iOS, and JVM — all with a clean, fluent API.
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.KamrulHasan/dateced.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.KamrulHasan)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kamrul3288/dateced.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.kamrul3288)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Kotlin](https://img.shields.io/badge/kotlin-multiplatform-orange.svg)](https://kotlinlang.org/docs/multiplatform.html)
+
+---
+
+## Platform Support
+
+| Platform | Supported |
+|----------|-----------|
+| Android | ✅ |
+| JVM (Desktop / Server) | ✅ |
+| iOS (arm64, x64, simulatorArm64) | ✅ |
+
+---
+
+## Installation
+
+### Core library — Android, iOS, JVM
+
+Add to your `libs.versions.toml`:
+
+```toml
+[versions]
+dateced = "2.1.0"
+
+[libraries]
+dateced        = { group = "io.github.kamrul3288", name = "dateced",         version.ref = "dateced" }
+dateced-compose = { group = "io.github.kamrul3288", name = "dateced-compose", version.ref = "dateced" }
+```
+
+Add to your module's `build.gradle.kts`:
+
+```kotlin
+// All platforms — Android, iOS, JVM
+implementation(libs.dateced)
+```
+
+### Jetpack Compose extensions (Android only)
+
+```kotlin
+// Core library is included automatically
+implementation(libs.dateced.compose)
+```
+
+> `dateced-compose` provides `rememberCurrentTime()`, `rememberFromNow()`, and `rememberTimeDifference()`.
+> If you don't use Jetpack Compose, you only need `dateced`.
 
 ---
 
@@ -14,35 +58,14 @@ DateCed makes date parsing, formatting, arithmetic, and relative-time display ef
 
 - **Immutable** — every operation returns a new instance; originals never change
 - **Thread-safe** — no shared mutable state
+- **Pure Kotlin** — no Android Gradle Plugin; works on Android, iOS, and JVM equally
 - **Auto-detect parsing** — recognises 15+ date/time formats without explicit patterns
 - **Type-safe timezone chain** — `toUTC()` returns `DateCedReadable`, preventing invalid chains like `.toUTC().toUTC()`
 - **Carbon-inspired `fromNow`** — "3 days ago", "in 2 hours" with past/future direction
 - **Boundary navigation** — `startOfDay`, `endOfMonth`, `startOfWeek`, etc.
 - **Field setters** — `withYear`, `withMonth`, `withHour`, etc.
-- **Compose-aware** — `rememberCurrentTime`, `rememberFromNow` live-updating state
+- **Compose-aware** — `rememberCurrentTime`, `rememberFromNow` live-updating state *(dateced-compose)*
 - **JVM interop** — bidirectional conversion with `java.time` types
-
----
-
-## Installation
-
-Add to your `libs.versions.toml`:
-
-```toml
-[versions]
-dateced = "2.0.0"
-
-[libraries]
-dateced = { group = "io.github.kamrul3288", name = "dateced", version.ref = "dateced" }
-```
-
-Add to your module's `build.gradle.kts`:
-
-```kotlin
-dependencies {
-    implementation(libs.dateced)
-}
-```
 
 ---
 
@@ -54,7 +77,7 @@ dependencies {
 val now    = DateCed.now()                             // current time, local zone
 val utcNow = DateCed.now(TimeZoneId.UTC)
 
-val parsed = DateCed.parse("2025-12-25 10:30:00")      // auto-detect format
+val parsed  = DateCed.parse("2025-12-25 10:30:00")     // auto-detect format
 val byEpoch = DateCed.parse(1_700_000_000_000L)        // epoch milliseconds
 val safe    = DateCed.tryParse("maybe-invalid")         // returns null on failure
 
@@ -206,7 +229,7 @@ else
 ```kotlin
 val local = DateCed.now()
 
-val utcView = local.toUTC()          // DateCedReadable — read-only zone view
+val utcView   = local.toUTC()                                  // DateCedReadable — read-only zone view
 val dhakaView = local.withTimeZone(TimeZoneId.of("Asia/Dhaka"))
 
 // Convert back for further arithmetic
@@ -215,7 +238,9 @@ val back: DateCed = local.toUTC().toDateCed()
 
 ---
 
-## Android Compose Integration
+## Jetpack Compose Integration
+
+> Requires the `dateced-compose` artifact. See [Installation](#installation).
 
 ### Live clock
 
@@ -254,7 +279,7 @@ fun DaysUntilNewYear() {
 
 ---
 
-## JVM / Android (XML) — Java Interop
+## JVM / Android — Java Interop
 
 ```kotlin
 // DateCed ↔ java.time
@@ -295,6 +320,7 @@ DateCed.parseJvm("Sunday, June 15, 2025", "EEEE, MMMM d, yyyy")
 | Component | Minimum |
 |-----------|---------|
 | Android | API 21 (Android 5.0) |
+| iOS | iOS 13 |
 | JVM | Java 17 |
 | Kotlin | 2.0+ |
 | kotlinx.datetime | 0.6+ |
@@ -316,6 +342,14 @@ You may obtain a copy of the License at
 ---
 
 ## Changelog
+
+### 2.1.0
+- **Pure Kotlin KMP** — removed Android Gradle Plugin from core module; follows the same pattern as `kotlinx-datetime`
+- **iOS support** — added `iosArm64`, `iosX64`, `iosSimulatorArm64` targets
+- **New `dateced-compose` artifact** — Jetpack Compose extensions extracted into a separate module
+- `rememberCurrentTime`, `rememberFromNow`, `rememberTimeDifference` moved to `dateced-compose`
+
+> **Migration from 2.0.0:** If you use Compose extensions, add `dateced-compose` to your dependencies. Core API is unchanged.
 
 ### 2.0.0
 - `TimeZoneId` upgraded to sealed class — supports any IANA timezone via `TimeZoneId.of("Asia/Dhaka")`
