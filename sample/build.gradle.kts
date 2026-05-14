@@ -46,7 +46,6 @@ dependencies {
     implementation(project(":dateced"))
     coreLibraryDesugaring(libs.desugar)
 
-    implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)

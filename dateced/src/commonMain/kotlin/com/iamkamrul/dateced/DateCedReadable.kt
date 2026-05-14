@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeFormat
 import kotlin.time.Instant
 
 // ======================================================================
@@ -83,6 +84,15 @@ interface DateCedReadable {
 
     /** Format as a time-only string using a Unicode TR35 [pattern]. */
     fun formatTime(pattern: String, zoneId: TimeZoneId = TimeZoneId.LOCAL): String
+
+    /** Format as a full date-time string using a pre-built [DateTimeFormat]. */
+    fun format(format: DateTimeFormat<LocalDateTime>, zoneId: TimeZoneId = TimeZoneId.LOCAL): String
+
+    /** Format as a date-only string using a pre-built [DateTimeFormat]. */
+    fun formatDate(format: DateTimeFormat<LocalDate>, zoneId: TimeZoneId = TimeZoneId.LOCAL): String
+
+    /** Format as a time-only string using a pre-built [DateTimeFormat]. */
+    fun formatTime(format: DateTimeFormat<LocalTime>, zoneId: TimeZoneId = TimeZoneId.LOCAL): String
 
     // ---- Formatting — pre-built shortcuts ----
 

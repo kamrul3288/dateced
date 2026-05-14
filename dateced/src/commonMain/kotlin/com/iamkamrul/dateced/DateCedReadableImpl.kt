@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
@@ -75,6 +76,15 @@ internal class DateCedReadableDelegate(
         val time = instant.toLocalDateTime(zoneId.toTimeZone()).time
         return DateCedFormat.timeFormat(pattern).format(time)
     }
+
+    override fun format(format: DateTimeFormat<LocalDateTime>, zoneId: TimeZoneId): String =
+        format.format(instant.toLocalDateTime(zoneId.toTimeZone()))
+
+    override fun formatDate(format: DateTimeFormat<LocalDate>, zoneId: TimeZoneId): String =
+        format.format(instant.toLocalDateTime(zoneId.toTimeZone()).date)
+
+    override fun formatTime(format: DateTimeFormat<LocalTime>, zoneId: TimeZoneId): String =
+        format.format(instant.toLocalDateTime(zoneId.toTimeZone()).time)
 
     // ---- Pre-built format shortcuts -------------------------------------
 

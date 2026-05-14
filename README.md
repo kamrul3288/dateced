@@ -100,6 +100,36 @@ DateCed.parse("2025-12-25 10:30:00")      // yyyy-MM-dd HH:mm:ss
 DateCed.parse("2025-12-25", "yyyy-MM-dd")
 ```
 
+### Parse with type-safe `DateTimeFormat`
+
+Prefer this when you need localized names (`MonthNames`, `DayOfWeekNames`),
+optional fields, or want compile-time safety instead of a runtime string pattern.
+
+```kotlin
+import kotlinx.datetime.format.*
+
+// Pre-build a format once and reuse it
+val fmt = LocalDateTime.Format {
+    date(LocalDate.Formats.ISO)
+    char('T')
+    time(LocalTime.Formats.ISO)
+}
+val d = DateCed.parse("2025-12-25T10:30:00", fmt)
+
+// Date-only format (time defaults to 00:00:00)
+val dateFmt = LocalDate.Format {
+    monthName(MonthNames.ENGLISH_FULL); char(' '); dayOfMonth(); chars(", "); year()
+}
+val d2 = DateCed.parseDate("December 25, 2025", dateFmt)
+
+// Time-only format (date defaults to today)
+val timeFmt = LocalTime.Format { hour(); char(':'); minute(); char(' '); amPmHour() }
+val d3 = DateCed.parseTime("02:30 PM", timeFmt)
+
+// Safe variant — returns null instead of throwing
+val safe = DateCed.tryParse("bad input", fmt)   // null
+```
+
 ### Format
 
 ```kotlin
@@ -118,6 +148,29 @@ d.format("yyyy/MM/dd")
 
 // JVM/Android only — full Java pattern set
 d.formatJvm("EEEE, MMMM d, yyyy 'at' h:mm a")  // "Sunday, June 15, 2025 at 2:30 PM"
+```
+
+### Format with type-safe `DateTimeFormat`
+
+Same `DateTimeFormat` API works for output — no magic strings, full IDE completion.
+
+```kotlin
+import kotlinx.datetime.format.*
+
+val longDate = LocalDate.Format {
+    dayOfWeek(DayOfWeekNames.ENGLISH_FULL); chars(", ")
+    monthName(MonthNames.ENGLISH_FULL); char(' ')
+    dayOfMonth(); chars(", "); year()
+}
+d.formatDate(longDate)   // "Sunday, June 15, 2025"
+
+val isoFmt = LocalDateTime.Format {
+    date(LocalDate.Formats.ISO); char('T'); time(LocalTime.Formats.ISO)
+}
+d.format(isoFmt)         // "2025-06-15T14:30:00"
+
+val timeFmt = LocalTime.Format { hour(); char(':'); minute(); char(':'); second() }
+d.formatTime(timeFmt)    // "14:30:00"
 ```
 
 ### Arithmetic
@@ -342,6 +395,11 @@ You may obtain a copy of the License at
 ---
 
 ## Changelog
+
+### 2.2.0
+- **Type-safe `DateTimeFormat` parse API** — new `parse()`, `parseDate()`, `parseTime()`, and `tryParse()` companion overloads that accept a `kotlinx.datetime.format.DateTimeFormat<T>`, enabling localized parsing with `MonthNames`, `DayOfWeekNames`, and the optional/alternative DSL
+- **Type-safe `DateTimeFormat` format API** — new `format()`, `formatDate()`, and `formatTime()` overloads on `DateCedReadable` accepting `DateTimeFormat<T>`
+- **`kotlinx.datetime` exposed as `api` dependency** — consumers can use `DateTimeFormat`, `MonthNames`, `DayOfWeekNames`, etc. directly without adding a separate `kotlinx.datetime` dependency
 
 ### 2.1.0
 - **Pure Kotlin KMP** — removed Android Gradle Plugin from core module; follows the same pattern as `kotlinx-datetime`

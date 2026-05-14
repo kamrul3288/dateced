@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -123,6 +124,57 @@ class DateCed private constructor(
             pattern: String? = null,
             zoneId: TimeZoneId = TimeZoneId.LOCAL,
         ): DateCed? = try { parse(dateTimeString, pattern, zoneId) } catch (_: Exception) { null }
+
+        /**
+         * Parse from a date-time string using a pre-built [DateTimeFormat].
+         *
+         * Prefer this over the string-pattern overload when you need type safety,
+         * localized names ([DayOfWeekNames], [MonthNames]), or optional sections
+         * via the [optional] DSL block.
+         */
+        fun parse(
+            input: String,
+            pattern: DateTimeFormat<LocalDateTime>,
+            zoneId: TimeZoneId = TimeZoneId.LOCAL,
+        ): DateCed {
+            val tz = zoneId.toTimeZone()
+            return DateCed(instant = pattern.parse(input).toInstant(tz), timeZone = tz)
+        }
+
+        /**
+         * Parse a date-only string using a pre-built [DateTimeFormat].
+         * Time defaults to midnight (00:00:00).
+         */
+        fun parseDate(
+            input: String,
+            pattern: DateTimeFormat<LocalDate>,
+            zoneId: TimeZoneId = TimeZoneId.LOCAL,
+        ): DateCed {
+            val tz = zoneId.toTimeZone()
+            val ldt = LocalDateTime(pattern.parse(input), LocalTime(0, 0, 0))
+            return DateCed(instant = ldt.toInstant(tz), timeZone = tz)
+        }
+
+        /**
+         * Parse a time-only string using a pre-built [DateTimeFormat].
+         * Date defaults to today in [zoneId].
+         */
+        fun parseTime(
+            input: String,
+            pattern: DateTimeFormat<LocalTime>,
+            zoneId: TimeZoneId = TimeZoneId.LOCAL,
+        ): DateCed {
+            val tz = zoneId.toTimeZone()
+            val today = Clock.System.now().toLocalDateTime(tz).date
+            return DateCed(instant = LocalDateTime(today, pattern.parse(input)).toInstant(tz), timeZone = tz)
+        }
+
+        /** Safe variant of [parse] with a [DateTimeFormat] — returns `null` instead of throwing. */
+        fun tryParse(
+            input: String,
+            format: DateTimeFormat<LocalDateTime>,
+            zoneId: TimeZoneId = TimeZoneId.LOCAL,
+        ): DateCed? = try { parse(input, format, zoneId) } catch (_: Exception) { null }
 
         // ---- Internal parsing ----
 
@@ -309,6 +361,10 @@ class DateCed private constructor(
     override fun format(pattern: String, zoneId: TimeZoneId): String     = delegate.format(pattern, zoneId)
     override fun formatDate(pattern: String, zoneId: TimeZoneId): String = delegate.formatDate(pattern, zoneId)
     override fun formatTime(pattern: String, zoneId: TimeZoneId): String = delegate.formatTime(pattern, zoneId)
+
+    override fun format(format: DateTimeFormat<LocalDateTime>, zoneId: TimeZoneId): String     = delegate.format(format, zoneId)
+    override fun formatDate(format: DateTimeFormat<LocalDate>, zoneId: TimeZoneId): String     = delegate.formatDate(format, zoneId)
+    override fun formatTime(format: DateTimeFormat<LocalTime>, zoneId: TimeZoneId): String     = delegate.formatTime(format, zoneId)
 
     override val dayName: String  get() = delegate.dayName
     override val d: String        get() = delegate.d
