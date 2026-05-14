@@ -116,3 +116,4 @@ secret-key.asc
 *.jks
 *.keystore
 secring.gpg
+.kotlin

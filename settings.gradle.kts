@@ -19,4 +19,5 @@ dependencyResolutionManagement {
 rootProject.name = "Dateced"
 include(":sample")
 include(":dateced")
+include(":dateced-compose")
 include(":sample-compose")
