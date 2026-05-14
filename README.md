@@ -33,7 +33,7 @@ Add to your `libs.versions.toml`:
 dateced = "2.0.0"
 
 [libraries]
-dateced = { group = "io.github.KamrulHasan", name = "dateced", version.ref = "dateced" }
+dateced = { group = "io.github.kamrul3288", name = "dateced", version.ref = "dateced" }
 ```
 
 Add to your module's `build.gradle.kts`:
